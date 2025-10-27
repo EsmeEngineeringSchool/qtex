@@ -114,7 +114,7 @@ def xml_answer(info,data,outfile,indent=0):
         outfile.write(oxml("file",("name",filename),("path","/"),("encoding","base64"))+png_to_base64(filepath_img))
         outfile.write(cxml("file"))
     else:
-        outfile.write(tab(indent+1)+textxml(text)+'\n')
+        outfile.write(tab(indent+1)+textcdataxml(text)+'\n')
     outfile.write(tab(indent+1)+octextxml("feedback",("format","html"),text=feedback,indent=indent+1))
     outfile.write(tab(indent+1)+ocxml("tolerance",valeur="0.0"))
     outfile.write(tab(indent)+cxml("answer"))
@@ -354,7 +354,7 @@ def xml_subquestion(info,data,outfile,indent):
     fraction,text,feedback,img,sub_q=data
     outfile.write(tab(indent+1)+otextcdataxml("subquestion",("format","html"),cdata=sub_q,indent=indent+1))
     outfile.write(tab(indent)+oxml("answer")+'\n')
-    outfile.write(tab(indent+3)+textxml(text)+'\n')
+    outfile.write(tab(indent+3)+textcdataxml(text)+'\n')
     outfile.write(tab(indent+2)+cxml("answer"))
     outfile.write(tab(indent+1)+cxml("subquestion"))
 

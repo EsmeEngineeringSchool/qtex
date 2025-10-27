@@ -15,7 +15,7 @@ grep -qE "<question type=\"category\">" $1
 xml_category=$1
 rep=$2
 mkdir -p $rep
-echo "#CAT $(grep -oP "(?<=\<category\><text>).*(?=\<\/text\>\<\/category\>)" $xml_category )" > $rep/category
+echo "#CAT $(grep -oP "(?<=\<category\><text>).*(?=\<\/text\>\<\/category\>)" $xml_category )" > $rep/category.qtex
 prefix=$3
 
 qk=0 #index de la question

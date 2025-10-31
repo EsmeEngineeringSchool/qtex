@@ -7,15 +7,17 @@ usage()
 dir=$(basename $1)
 dirout=$(basename $2)
 [ -z $dirout ] && echo "you should give dir/output" && usage 
-for file in ${dir}/*.qtex
+for file in  $(find ${dir} -name '*.qtex'); 
 do
+    path=$(dirname $file)
     base=$(basename $file)
-    if [ ${base} == "category.qtex" ]
+    pathout=${path/${dir}/${dirout}} && mkdir -p ${pathout}
+    baseout=${base::-5}_en.qtex
+    if [ ${base} == "category.qtex" ] 
     then
-        file_en=category.qtex
-    else
-        file_en=${base::-5}_en.qtex
+        cp ${file} ${pathout}/${base}
     fi
-    echo "${dir}/$base -> ${dirout}/$file_en"
-    transqtex -i ${dir}/$base -o ${dirout}/$file_en
+    fileout=${pathout}/${baseout}
+    echo "$base -> $baseout"
+    transqtex -i ${file} -o ${fileout}
 done

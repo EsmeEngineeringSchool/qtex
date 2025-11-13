@@ -533,7 +533,8 @@ def parsing():
         output.seek(0,0)
         output.truncate()
 
-    path=os.path.dirname(args.input[0].name)+'/'
+    dirname=os.path.dirname(args.input[0].name)
+    path = './' if not dirname else dirname+'/'
     filespath=args.input
     return path,filespath,output
 

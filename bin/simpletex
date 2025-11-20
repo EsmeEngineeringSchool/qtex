@@ -3,5 +3,5 @@ qtex=$1
 cat templates/template_qcm_simple.tex > tmp_simple.tex
 bin/qtex2latex -i $qtex >> tmp_simple.tex
 echo "\end{document}" >> tmp_simple.tex
-pdflatex tmp_simple.tex #> /dev/null
-mupdf -r 216 tmp_simple.pdf #2> /dev/null &
+pdflatex tmp_simple.tex > /dev/null
+mupdf -r 216 tmp_simple.pdf 2> /dev/null &

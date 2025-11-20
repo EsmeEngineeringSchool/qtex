@@ -1,0 +1,81 @@
+#!/usr/bin/env python3
+import sys
+import os
+sys.path.append(os.path.abspath("/home/filipe/dev/qtex2xml/bin"))
+from lib_qtex import quellecle,readqtex,default_values_before 
+
+# commande
+def macro(name,value):
+    return f"\\{name}""{"f"{value}""}"
+
+def newline(size="0.2cm"):
+    if len(size) :
+        return f"\\\\[{size}]\n"
+    else:
+        return f"\n"
+
+
+def lans_corrige(answ_text,grad,index):
+    out="\\indent\\textbf{"f"{chr(index+65)}.""}"#"{{\\large\\xmark} }\\newline"
+    if float(grad) > 0. :
+        out+=" {\color{OliveGreen}" f" {answ_text} " " {\\large\\cmark}}\\newline"
+    else:
+        out+=" {\color{BrickRed}  " f" {answ_text} " " {\\large\\xmark}}\\newline"
+    return out
+
+def multichoice_to_latex(info,outfile):
+    outfile.write(macro("question",info["Q"])+newline())
+    for k,ans in enumerate(info['ANSW_TEXT']):
+        outfile.write(lans_corrige(ans,info['ANSW_GRAD'][k],k)+newline(""))
+
+def matching_to_latex(info):
+    pass
+def coderunner_to_latex(info):
+    pass
+
+
+def qtex_to_latex(info,outfile):
+    match info["TYPE"]:
+        case "multichoice":
+            multichoice_to_latex(info,outfile)
+        case "matching":
+            matching_to_latex(info,outfile)
+        case "coderunner":
+            coderunner_to_latex(info,outfile)
+        case _:
+            print(f"{info['TYPE']}->latex not possible")
+
+
+
+#--------------------------------------------------------------------------------------------------
+# main parsing function
+def parsing():
+    import os
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i','--input', nargs='+', type=argparse.FileType('r'),
+                        default=sys.stdin,help='input files (on single or a set)',required=True)
+    parser.add_argument('-o','--output', nargs='?', type=argparse.FileType('a'),
+                        default=sys.stdout, help='output file or stdout')
+    args = parser.parse_args()
+
+    output=args.output
+    if output.name !="<stdout>":
+        output.seek(0,0)
+        output.truncate()
+
+    path=os.path.dirname(args.input[0].name)+'/'
+    filespath=args.input
+    return path,filespath,output
+
+
+if __name__=="__main__":
+    path,filespath,outfile=parsing()
+    for file in filespath :
+        if file.name[-13:]=="category.qtex" : continue
+        print(file.name,file=sys.stderr,end=' ')
+        info=readqtex(path,file)
+        print(f"\n\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
+#        print(info)
+        qtex_to_latex(info,outfile)
+

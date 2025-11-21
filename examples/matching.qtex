@@ -1,0 +1,16 @@
+#Q Associer la commande d'extraction de sous-chaine avec son résultat lorsque <tt>chaine="vlhburdfs"</tt>.
+#SUB_Q <tt>echo ${chaine:6:2}</tt>
+#SUB_Q <tt>echo ${chaine:0:4}</tt>
+#SUB_Q <tt>echo ${chaine:7:2}</tt>
+#SUB_Q <tt>echo ${chaine:3:3}</tt>
+#ANSW_TEXT <tt>df</tt>
+#ANSW_TEXT <tt>vlhb</tt>
+#ANSW_TEXT <tt>fs</tt>
+#ANSW_TEXT <tt>bur</tt>
+#TYPE matching
+#TAGS manipulation chaine extraction cours10 AAS71 AAS73 AAS75
+#NAME extraction_chaines_matching
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CFBACK Bravo! Votre réponse est correcte.
+#PFBACK Votre réponse est partiellement correcte.
+#IFBACK Votre réponse est incorrecte.

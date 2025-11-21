@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import os
+import random
 sys.path.append(os.path.abspath("/home/filipe/dev/qtex2xml/bin"))
 from lib_qtex import quellecle,readqtex,default_values_before 
 
@@ -14,25 +15,31 @@ def newline(size="0.2cm"):
     else:
         return f"\n"
 
-
-def lans_corrige(answ_text,grad,index):
-    out="\\indent\\textbf{"f"{chr(index+65)}.""}"#"{{\\large\\xmark} }\\newline"
-    if float(grad) > 0. :
-        out+=" {\color{OliveGreen}" f" {answ_text} " " {\\large\\cmark}}\\newline"
+def lans(answ_text,grad,index,corrige=True):
+    out="\\indent\\textbf{"f"{chr(index+65)}.""}"
+    if corrige :
+        if float(grad) > 0. :
+            out+=" {\color{OliveGreen}" f" {answ_text} " " {\\large\\cmark}}\\newline"
+        else:
+            out+=" {\color{BrickRed}  " f" {answ_text} " " {\\large\\xmark}}\\newline"
+        return out
     else:
-        out+=" {\color{BrickRed}  " f" {answ_text} " " {\\large\\xmark}}\\newline"
+        return out+f" {answ_text} "+"\\newline\hfill"
+
     return out
 
 def multichoice_to_latex(info,outfile):
     outfile.write(macro("question",info["Q"])+newline())
-    for k,ans in enumerate(info['ANSW_TEXT']):
-        outfile.write(lans_corrige(ans,info['ANSW_GRAD'][k],k)+newline(""))
+    answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD']))
+    random.shuffle(answ)
+    for k, (answ_txt,answ_grad) in enumerate(answ):
+        outfile.write(lans(answ_txt,answ_grad,k,corrige=True)+newline(""))
 
 def matching_to_latex(info):
+    outfile.write(macro("question",info["Q"])+newline())
     pass
 def coderunner_to_latex(info):
     pass
-
 
 def qtex_to_latex(info,outfile):
     match info["TYPE"]:

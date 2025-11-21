@@ -1,3 +1,4 @@
+import re
 from format_qtex import entrees 
 
 #--------------------------------------------------------------------------------------------------
@@ -23,7 +24,6 @@ def rmnewlinesboth(x):
 #Récupérer la chaine de caractère associé à une clé
 #la fonction retourne une chaine par défaut sinon une liste de chaines des "match"
 def get(pattern,data):
-    import re
     if entrees[pattern]["long"] :
         # Récupérer la chaine de caractères entre les champ #{pattern} et  #END {pattern}
         regex=f"(?<=\#{pattern}\s|\#{pattern}\n).*?(?=\#END {pattern}.*)"
@@ -42,12 +42,10 @@ def get(pattern,data):
 #--------------------------------------------------------------------------------------------------
 #retourne combien d'occurences sont trouvés
 def mult(pattern,data):
-    import re
     return len(re.findall(r"\#"+pattern+r'\s', data))
 
 #--------------------------------------------------------------------------------------------------
 #un grep simplifié retourne True si la recherche de "\#pattern\s" dans data est un succès
 def grep(pattern,data):
-    import re
     return re.search(r"\#"+pattern+r'\s', data) != None
 

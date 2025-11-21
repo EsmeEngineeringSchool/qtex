@@ -4,5 +4,5 @@ build=./build
 cat templates/template_qcm_simple.tex > $build/tmp_simple.tex
 bin/qtex2latex -i $qtex >> $build/tmp_simple.tex
 echo "\end{document}" >> $build/tmp_simple.tex
-pdflatex $build/tmp_simple.tex > /dev/null
-mupdf -r 216 tmp_simple.pdf 2> /dev/null &
+pdflatex -output-directory $build $build/tmp_simple.tex #> /dev/null
+mupdf -r 216 $build/tmp_simple.pdf #2> /dev/null &

@@ -1,13 +1,24 @@
 #!/usr/bin/env python3
 import sys
 import os
+import re
 import random
 sys.path.append(os.path.abspath("/home/filipe/dev/qtex2xml/bin"))
 from lib_qtex import quellecle,readqtex,default_values_before 
 
-# commande
+def obr():
+    return "{"
+def cbr():
+    return "}"
+
+def benv(name):
+    return "\\begin{"f"{name}""}"
+def eenv(name):
+    return "\\end{"f"{name}""}"
 def macro(name,value):
-    return f"\\{name}""{"f"{value}""}"
+    return f"{cmd(name)}{obr()}{value}{cbr()}"
+def cmd(name):
+    return f"\\{name}"
 
 def newline(size="0.2cm"):
     if len(size) :
@@ -25,7 +36,6 @@ def lans(answ_text,grad,index,corrige=True):
         return out
     else:
         return out+f" {answ_text} "+"\\newline\hfill"
-
     return out
 
 def multichoice_to_latex(info,outfile):
@@ -35,9 +45,51 @@ def multichoice_to_latex(info,outfile):
     for k, (answ_txt,answ_grad) in enumerate(answ):
         outfile.write(lans(answ_txt,answ_grad,k,corrige=True)+newline(""))
 
-def matching_to_latex(info):
+
+def template_first_answer_matching(k,subq,answ_text,gw=80,dw=80):
+    #print(k,G,D)
+    if k == 0 :
+        return \
+        f"""
+        {cmd('node')}[text width={gw}mm,align=left] (a1) at (0,0) {"{"} {macro("textbf",chr(65+k)+'.')} {subq} {"}"};
+        {cmd('node')} (b1) at ($(a1.east)+(1,0)$) {{}};
+        {cmd('node')} (c1) at ($(b1.east)+(2,0)$) {{}};
+        {cmd('draw')}[thick,outer sep=8mm] (b1) circle(0.5ex);
+        {cmd('draw')}[thick,outer sep=8mm] (c1) circle(0.5ex);
+        {cmd('node')}[text width={dw},align = right] (d1) at ($(c1.east)+(6,0)$) {"{"} {macro("textbf",str(k+1)+'.')} {answ_text} {"}"};"""
+    else:
+        return \
+        f"""
+        {cmd('node')}[text width={gw},below=0.75cm of a{k}.center,anchor=center,align=left] (a{k+1}) {"{"} {macro("textbf",chr(65+k)+'.')} {subq} {"}"};
+        {cmd('node')}[below=0.75cm of b{k}.center,anchor=center] (b{k+1}) {{}};
+        {cmd('node')}[below=0.75cm of c{k}.center,anchor=center] (c{k+1}) {{}};
+        {cmd('draw')}[thick,outer sep=8mm] (b{k+1}) circle(0.5ex);
+        {cmd('draw')}[thick,outer sep=8mm] (c{k+1}) circle(0.5ex);
+        {cmd('node')}[below=0.75cm of d{k}.center,anchor=center,text width={dw},align = right] (d{k+1}) {"{"} {macro("textbf",str(k+1)+'.')} {answ_text} {"}"};"""
+#def template_2(G,D,N,gw="80mm",dw="80mm"):
+#    GL=G.group(0).split(" ",1)
+#    DL=D.group(0).split(" ",1)
+#    print("""
+#    \\node[text width={6:},below=0.75cm of a{4:}.center,anchor=center,align=left] (a{5:}) {{\\textbf{{ {0:} }} {1:} }};
+#    \\node[below=0.75cm of b{4:}.center,anchor=center] (b{5:}) {{}};
+#    \\node[below=0.75cm of c{4:}.center,anchor=center] (c{5:}) {{}};
+#    \\draw[thick,outer sep=8mm] (b{5:}) circle(0.5ex);
+#    \\draw[thick,outer sep=8mm] (c{5:}) circle(0.5ex);
+#    \\node[below=0.75cm of d{4:}.center,anchor=center,text width={7:},align = right] (d{5:}) {{\\textbf{{ {2:} }} {3:} }};""".format(GL[0],GL[1],DL[0],DL[1],N,N+1,gw,dw))
+
+def matching_to_latex(info,outfile):
     outfile.write(macro("question",info["Q"])+newline())
-    pass
+    outfile.write("\\indent\\resizebox{\linewidth}{!}{%"+newline(""))
+    outfile.write(benv("tikzpicture")+newline(""))
+    #print(info['SUB_Q'],info['ANSW_TEXT'])
+    maxwidth_sub_q, maxwidth_answ_text = (max(map(len,info['SUB_Q']))+8)*1.51323 , (max(map(len,info['ANSW_TEXT']))+8)*1.51323
+    answ=list(zip(info['SUB_Q'],info['ANSW_TEXT']))
+    random.shuffle(answ)
+    #print(maxwidth_sub_q,maxwidth_answ_text)
+    for k,(subq,answ_text) in enumerate(answ) :
+        outfile.write(template_first_answer_matching(k,subq,answ_text,gw=maxwidth_sub_q,dw=maxwidth_answ_text)+newline(""))
+    outfile.write(eenv("tikzpicture")+newline(""))
+
 def coderunner_to_latex(info):
     pass
 
@@ -76,12 +128,26 @@ def parsing():
     return path,filespath,output
 
 
+def html_to_tex(info):
+    filters=[]
+    filters+=[lambda t : re.sub(r"<tt>(.*?)</tt>", r"\\texttt{\1}", t)]
+    for key in info :
+        for f in filters:
+            if info[key] is not None :
+                if isinstance(info[key],list):
+                    if all(e is not None for e in info[key]) :
+                        info[key]=list(map(f,info[key]))
+                else:
+                    info[key]=f(info[key])
+
+
 if __name__=="__main__":
     path,filespath,outfile=parsing()
     for file in filespath :
         if file.name[-13:]=="category.qtex" : continue
         print(file.name,file=sys.stderr,end=' ')
         info=readqtex(path,file)
+        html_to_tex(info)
         print(f"\n\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
 #        print(info)
         qtex_to_latex(info,outfile)

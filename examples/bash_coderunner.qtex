@@ -1,46 +1,152 @@
 #TYPE coderunner
-#NAME Exemple de question coderunner pour bash 
+#CR_TYPE bash
+#NAME  
 #Q_LONG
-Write bash code to list the names of all files in the current directory 
-that have an extension of .txt. Files are listed 1 per line, in alphabetical order.
+<p>Écrire un script nommé <code>analyser</code> qui doit calculer le nombre de fichiers standard, de sous-répertoires, et d'exécutables d'un répertoire quelconque qui sera donné en paramètre.</p>
+<p>Le répertoire ci-dessous (et d'autres caché) sera utiliser pour tester votre script :</p>
+<pre>rep_exemple/
+    fichier_std1 (fichier standard)
+    fichier_std2 (fichier standard)
+    fichier_exe  (fichier executable)
+    sous_rep1/   (sous répertoire)
+    sous_rep2/   (sous répertoire)
+</pre>
 #END Q_LONG
 #GFBACK Merci d'avoir pris le temps de répondre à cette question.
 #CR_ISCOMBINATORTEMPLATE false 
 #CR_TEMPLATE
-import subprocess
+""" The template for a question type that compiles and runs a student-submitted^M
+    bash script.
+"""
+import subprocess, sys, os
 
-script = """{{ TEST.testcode | e('py') }}""" + '\n' + """{{ STUDENT_ANSWER | e('py') }}"""
-input = """{{ TEST.stdin | e('py') }}"""
+os.mkdir("./rep_exemple")
+open("rep_exemple/fichier_std1", "w").close()
+open("rep_exemple/fichier_std2", "w").close()
+open("rep_exemple/fichier_exe", "w").close()
+os.chmod("rep_exemple/fichier_exe", 0o755)
+os.mkdir("./rep_exemple/sous_rep1")
+os.mkdir("./rep_exemple/sous_rep2")
 
-with open('__prog__.sh', 'w') as outfile:
-    outfile.write(script)
+os.mkdir("./tmp")
+open("tmp/f1", "w").close()
+open("tmp/f2", "w").close()
+open("tmp/f3", "w").close()
+open("tmp/f4", "w").close()
+os.chmod("tmp/f2", 0o755)
+os.chmod("tmp/f3", 0o755)
+os.mkdir("tmp/r1")
+os.mkdir("tmp/r2")
+os.mkdir("tmp/r3")
 
-subprocess.run(['/bin/bash', '__prog__.sh'], text=True, input=input)
+script_name="./analyser"
+
+# Write the student code to a file script-etu.sh^M
+student_answer = """{{ STUDENT_ANSWER | e('py') }}"""
+with open(script_name, "w") as src:
+    print(student_answer, file=src)
+
+os.chmod(script_name, 0o755)
+
+# Run the code. Since this is a per-test template,
+# stdin is already set up for the stdin text specified in the test case,
+# so we can run the compiled program directly.
+try:
+    args = [script_name]
+    if len("{{ TEST.stdin  }}") :
+        args.append("{{ TEST.stdin  }}")
+    output = subprocess.check_output(args, universal_newlines=True)
+    print(output)
+except subprocess.CalledProcessError as e:
+    if e.returncode > 0:
+        # Ignore non-zero positive return codes
+        if e.output:
+            print(e.output)
+    else:
+        # But negative return codes are signals - abort
+        if e.output:
+            print(e.output, file=sys.stderr)
+        if e.returncode < 0:
+            print("Task failed with signal", -e.returncode, file=sys.stderr)
+        print("** Further testing aborted **", file=sys.stderr)
 #END CR_TEMPLATE
 #CR_PRELOAD
 #END CR_PRELOAD
 #CR_ANSWER
-{"answer_code":["ls *.txt"],"test_code":[""],"show_hide":[""],"prefix_ans":["1"]}
+#!/bin/bash
+usage()
+{
+    echo "Usage: $0 <rep>"
+    exit 1
+}
+[ "$#" -lt 1 ] && usage
+
+rep=$1
+c_dir=0
+c_file=0
+c_exe=0
+for file in ${rep}/*
+do
+        if [ -d ${file} ]
+        then
+            echo "${file} est un sous-répertoire"
+            c_dir=$((c_dir+1))
+        fi
+        if [ -f ${file} ]
+        then
+            if [ -x ${file} ]
+            then
+                echo "${file} est un fichier exécutable"
+                c_exe=$((c_exe+1))
+            else
+                echo "${file} est un fichier standard"
+                c_file=$((c_file+1))
+            fi
+        fi
+done
+echo "${rep}: dir: ${c_dir} file: ${c_file} file_exe: ${c_exe}"
 #END CR_ANSWER
 #CR_CASE_CODE
-touch thing.txt
-touch wrong.ext
-touch another.txt
+./analyser
 #END CR_CASE_CODE
-#CR_CASE_CODE
-touch dumbo2.txt
-touch dumbo1.txt
-#END CR_CASE_CODE
-#CR_CASE_MARK 1.0
-#CR_CASE_MARK 1.0
+#CR_STDIN
 #CR_CASE_EXPECTED_LONG
-another.txt
-thing.txt
+Usage: ./analyser <rep>
 #END CR_CASE_EXPECTED_LONG 
-#CR_CASE_EXPECTED_LONG
-dumbo1.txt
-dumbo2.txt
-#END CR_CASE_EXPECTED_LONG 
+#CR_CASE_DISPLAY SHOW
+#CR_CASE_MARK 1.0
 #CR_CASE_ASEXAMPLE 1
+#CR_CASE_CODE
+./analyser
+#END CR_CASE_CODE
+#CR_STDIN rep_exemple
+#CR_CASE_EXPECTED_LONG
+rep_exemple/fichier_exe est un fichier exécutable
+rep_exemple/fichier_std1 est un fichier standard
+rep_exemple/fichier_std2 est un fichier standard
+rep_exemple/sous_rep1 est un sous-répertoire
+rep_exemple/sous_rep2 est un sous-répertoire
+rep_exemple: dir: 2 file: 2 file_exe: 1
+#END CR_CASE_EXPECTED_LONG 
+#CR_CASE_DISPLAY SHOW
+#CR_CASE_MARK 1.0
+#CR_CASE_ASEXAMPLE 0
+
+#CR_CASE_CODE
+./analyser
+#END CR_CASE_CODE
+#CR_STDIN tmp
+#CR_CASE_EXPECTED_LONG
+tmp/f1 est un fichier standard
+tmp/f2 est un fichier exécutable
+tmp/f3 est un fichier exécutable
+tmp/f4 est un fichier standard
+tmp/r1 est un sous-répertoire
+tmp/r2 est un sous-répertoire
+tmp/r3 est un sous-répertoire
+tmp: dir: 3 file: 2 file_exe: 2
+#END CR_CASE_EXPECTED_LONG
+#CR_CASE_DISPLAY HIDE
+#CR_CASE_MARK 1.0
 #CR_CASE_ASEXAMPLE 0
 #TAGS qtex2xml exemple bash template

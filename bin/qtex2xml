@@ -202,7 +202,7 @@ def xml_numerical_globalinfo(info,outfile,indent):
 #--------------------------------------------------------------------------------------------------
 # ecrire globalinfo pour coderunner
 def xml_coderunner_globalinfo(info,outfile,indent):
-    outfile.write(tab(indent)+ocxml("coderunnertype",valeur="python3"))
+    outfile.write(tab(indent)+ocxml("coderunnertype",valeur=info["CR_TYPE"]))
     outfile.write(tab(indent)+ocxml("prototypetype",valeur="0"))
     outfile.write(tab(indent)+ocxml("allornothing",valeur="1"))
     outfile.write(tab(indent)+ocxml("penaltyregime",valeur=info["CR_PENALTYREGIME"]))

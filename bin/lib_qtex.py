@@ -41,6 +41,7 @@ def default_values_before(data):
         case "matching" :
             if not grep('SUB_Q',data)      : info['SUB_Q']=[""]*m
         case "coderunner" :
+            if not grep("CR_TYPE",data)                  : info["CR_TYPE"]="python3"
             if not grep("CR_TEMPLATE",data)              : info["CR_TEMPLATE"]=""
             if not grep("CR_ACELANG",data)               : info["CR_ACELANG"]=""
             if not grep("CR_TWIGALL",data)               : info["CR_TWIGALL"]="0"

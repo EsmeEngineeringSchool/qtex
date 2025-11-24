@@ -116,6 +116,8 @@ def parsing():
 
 def html_to_tex(info):
     filters=[]
+    filters+=[lambda t : re.sub(r"{", r"\{", t)]
+    filters+=[lambda t : re.sub(r"}", r"\}", t)]
     filters+=[lambda t : re.sub(r"<tt>(.*?)</tt>", r"\\texttt{\1}", t)]
     filters+=[lambda t : re.sub(r"\$", r"\\$", t)]
     filters+=[lambda t : re.sub(r"&dollar;", r"\\\$", t)]

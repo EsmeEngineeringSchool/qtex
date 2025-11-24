@@ -1,0 +1,46 @@
+#TYPE coderunner
+#NAME Exemple de question coderunner pour bash 
+#Q_LONG
+Write bash code to list the names of all files in the current directory 
+that have an extension of .txt. Files are listed 1 per line, in alphabetical order.
+#END Q_LONG
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CR_ISCOMBINATORTEMPLATE false 
+#CR_TEMPLATE
+import subprocess
+
+script = """{{ TEST.testcode | e('py') }}""" + '\n' + """{{ STUDENT_ANSWER | e('py') }}"""
+input = """{{ TEST.stdin | e('py') }}"""
+
+with open('__prog__.sh', 'w') as outfile:
+    outfile.write(script)
+
+subprocess.run(['/bin/bash', '__prog__.sh'], text=True, input=input)
+#END CR_TEMPLATE
+#CR_PRELOAD
+#END CR_PRELOAD
+#CR_ANSWER
+{"answer_code":["ls *.txt"],"test_code":[""],"show_hide":[""],"prefix_ans":["1"]}
+#END CR_ANSWER
+#CR_CASE_CODE
+touch thing.txt
+touch wrong.ext
+touch another.txt
+#END CR_CASE_CODE
+#CR_CASE_CODE
+touch dumbo2.txt
+touch dumbo1.txt
+#END CR_CASE_CODE
+#CR_CASE_MARK 1.0
+#CR_CASE_MARK 1.0
+#CR_CASE_EXPECTED_LONG
+another.txt
+thing.txt
+#END CR_CASE_EXPECTED_LONG 
+#CR_CASE_EXPECTED_LONG
+dumbo1.txt
+dumbo2.txt
+#END CR_CASE_EXPECTED_LONG 
+#CR_CASE_ASEXAMPLE 1
+#CR_CASE_ASEXAMPLE 0
+#TAGS qtex2xml exemple bash template

@@ -1,6 +1,6 @@
 # QTeX
 
-Monorepo[^1] contenant les trois sous-modules QTeX :
+Monodépôt[^1] contenant les trois sous-modules QTeX :
 
 - `qtex2xml` : conversion QTeX → XML
 - `qtex2latex` : conversion QTeX → LaTeX

@@ -3,8 +3,7 @@ import sys
 import os
 import re
 import random
-sys.path.append(os.path.abspath("/home/filipe/dev/qtex2xml/bin"))
-from lib_qtex import quellecle,readqtex,default_values_before 
+from qtex.common.lib_qtex import quellecle,readqtex,default_values_before 
 
 def benv(name):
     return "\\begin{"f"{name}""}"
@@ -131,7 +130,7 @@ def html_to_tex(info):
                     info[key]=f(info[key])
 
 
-if __name__=="__main__":
+def main():
     path,filespath,outfile=parsing()
     for file in filespath :
         if file.name[-13:]=="category.qtex" : continue

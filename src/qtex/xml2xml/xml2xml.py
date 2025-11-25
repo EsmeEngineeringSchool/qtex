@@ -154,7 +154,7 @@ def parsing_command_line():
     #print(args)
     return args
 #--------------------------------------------------------------------------------------------------
-if __name__ == "__main__":
+def main():
     args = parsing_command_line()
     f=args.config
     tags_from_config_file=load_tag_config(f)

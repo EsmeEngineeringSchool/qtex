@@ -1,15 +1,19 @@
 #!/usr/bin/python3
 import sys
 import os
+from qtex.common.format_qtex import infos, entrees, types_with_requirements, same_number
+from qtex.common.string_ import get, mult, grep, tab
+from qtex.common.conversion import png_to_base64
+from qtex.common.lib_qtex import quellecle, readqtex, default_values_before
 # les modules suivants partagent des fonctions avec transqtex 
-sys.path.append(os.path.abspath("/home/filipe/dev/qtex2xml/bin"))
+#sys.path.append(os.path.abspath("/home/filipe/dev/qtex2xml/bin"))
 # le format (les types d'entrees) et informations par type (est partagé avec d'autre script)
-from format_qtex import infos,entrees,types_with_requirements,same_number 
+#from format_qtex import infos,entrees,types_with_requirements,same_number 
 # quelques fonctions de manipulations de chaines partagées avec l'autre script
-from string_ import get,mult,grep,tab
+#from string_ import get,mult,grep,tab
 # fonctions de conversion de png to base64
-from conversion import png_to_base64
-from lib_qtex import quellecle,readqtex,default_values_before 
+#from conversion import png_to_base64
+#from lib_qtex import quellecle,readqtex,default_values_before 
 
 # return une chaine vide "" ou "0" en fonction du boléen lue au format qtex 0,1,true,false 
 def qtexbool(v):
@@ -443,7 +447,7 @@ def parsing():
     return path,filespath,output
 
 #--------------------------------------------------------------------------------------------------
-if __name__=="__main__":
+def main() :
     path,filespath,outfile=parsing()
     xml_headerquiz(outfile=outfile)
     with open(path+"category.qtex","r") as file:

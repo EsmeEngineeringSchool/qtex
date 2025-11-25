@@ -22,4 +22,4 @@ Le script parcourt récursivement le répertoire indiqué, fusionne tous les fic
 Chaque fichier est intégré à l'intérieur d'une balise `<quiz>...</quiz>` complète.
 
 
-[^1] Ce dépôt est le résultat de la fusion de trois précédents dépôts maintenant disparus de https://github.com/EsmeEngineeringSchool/ 
+[^1]: Ce dépôt est le résultat de la fusion de trois précédents dépôts maintenant disparus de https://github.com/EsmeEngineeringSchool/ 

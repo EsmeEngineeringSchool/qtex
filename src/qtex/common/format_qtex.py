@@ -1,10 +1,10 @@
 """
     les différentes entrées qui peuvent être lues dans un fichier au format qtex.
     La clé du dictionnaire correspond au différent entrée reconnue au format #clé
-    Cette clé possède trois propriétés sont possibles pour cette clé :
-        long        : l'entrée commence par #key et #END key 
-        translation : l'entrée est traduite ou pas lorsquelle est lue par le script transqtex
-        multiple    : si elle peut être répété dans le fichier
+    Cette clé possède trois propriétés :
+        long        : oui ou non l'entrée est multilignes c'est à dire qu'elle commence par #key et #END key 
+        translation : oui ou non l'entrée est traduisible (ça a du sens de la traduire)
+        multiple    : oui ou non l'entrée est répétée dans le fichier
 """
 entrees={'TYPE'                    :{'long':False,'translation':False,'multiple':False},
          'NAME'                    :{'long':False,'translation':True ,'multiple':False},

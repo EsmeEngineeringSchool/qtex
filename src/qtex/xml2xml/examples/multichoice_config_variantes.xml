@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 0  -->
+  <question type="category">
+    <category>
+      <text>$course$/top/Séance 07 : Interpolation</text>
+    </category>
+    <info format="moodle_auto_format">
+      <text></text>
+    </info>
+    <idnumber></idnumber>
+  </question>
+
+<!-- question: 0  -->
+  <question type="category">
+    <category>
+      <text>$course$/top/Séance 07 : Interpolation/Déterminer le degré d'un polynôme interpolateur</text>
+    </category>
+    <info format="moodle_auto_format">
+      <text></text>
+    </info>
+    <idnumber></idnumber>
+  </question>
+
+<!-- question: 4333204  -->
+  <question type="multichoice">
+    <name>
+      <text>Déterminer le degré d'un polynôme interpolateur - Variante 01</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>\((-3,-9)\), \((3,-8)\) sont 2 points du plan,
+        d'abscisses deux à deux distinctes. Cocher la / les bonne(s) réponses :</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>false</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <correctfeedback format="html">
+      <text>Votre réponse est correcte.</text>
+    </correctfeedback>
+    <partiallycorrectfeedback format="html">
+      <text>Votre réponse est partiellement correcte.</text>
+    </partiallycorrectfeedback>
+    <incorrectfeedback format="html">
+      <text>Votre réponse est incorrecte.</text>
+    </incorrectfeedback>
+    <shownumcorrect/>
+    <answer fraction="100" format="html">
+      <text>il existe un unique polynôme de degré 1 dont le graphe passe par ces 2 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 2, dont le graphe passe par ces 2 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 0 dont le graphe passe par ces 2 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 3 dont le graphe passe par ces 2 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <tags>
+      <tag><text>interpolation</text>
+</tag>
+      <tag><text>degre</text>
+</tag>
+      <tag><text>polynome</text>
+</tag>
+    </tags>
+  </question>
+
+<!-- question: 4333205  -->
+  <question type="multichoice">
+    <name>
+      <text>Déterminer le degré d'un polynôme interpolateur - Variante 02</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>\((6,6)\), \((8,2)\), \((-3,-9)\), \((-8,4)\), \((-7,-9)\), \((5,6)\), \((-1,4)\) sont 7 points du plan,
+        d'abscisses deux à deux distinctes. Cocher la / les bonne(s) réponses :</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>false</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <correctfeedback format="html">
+      <text>Votre réponse est correcte.</text>
+    </correctfeedback>
+    <partiallycorrectfeedback format="html">
+      <text>Votre réponse est partiellement correcte.</text>
+    </partiallycorrectfeedback>
+    <incorrectfeedback format="html">
+      <text>Votre réponse est incorrecte.</text>
+    </incorrectfeedback>
+    <shownumcorrect/>
+    <answer fraction="100" format="html">
+      <text>il existe un unique polynôme de degré 6 dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 7, dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 5 dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 8 dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <tags>
+      <tag><text>interpolation</text>
+</tag>
+      <tag><text>degre</text>
+</tag>
+      <tag><text>polynome</text>
+</tag>
+    </tags>
+  </question>
+
+<!-- question: 4333206  -->
+  <question type="multichoice">
+    <name>
+      <text>Déterminer le degré d'un polynôme interpolateur - Variante 03</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>\((-3,-8)\), \((5,8)\), \((-8,5)\), \((-5,-6)\), \((8,5)\), \((-6,3)\), \((2,-6)\), \((3,0)\) sont 8 points du plan,
+        d'abscisses deux à deux distinctes. Cocher la / les bonne(s) réponses :</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>false</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <correctfeedback format="html">
+      <text>Votre réponse est correcte.</text>
+    </correctfeedback>
+    <partiallycorrectfeedback format="html">
+      <text>Votre réponse est partiellement correcte.</text>
+    </partiallycorrectfeedback>
+    <incorrectfeedback format="html">
+      <text>Votre réponse est incorrecte.</text>
+    </incorrectfeedback>
+    <shownumcorrect/>
+    <answer fraction="100" format="html">
+      <text>il existe un unique polynôme de degré 7 dont le graphe passe par ces 8 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 8, dont le graphe passe par ces 8 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 6 dont le graphe passe par ces 8 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 9 dont le graphe passe par ces 8 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <tags>
+      <tag><text>interpolation</text>
+</tag>
+      <tag><text>degre</text>
+</tag>
+      <tag><text>polynome</text>
+</tag>
+    </tags>
+  </question>
+
+<!-- question: 4333207  -->
+  <question type="multichoice">
+    <name>
+      <text>Déterminer le degré d'un polynôme interpolateur - Variante 04</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p>\((-9,5)\), \((3,-5)\), \((-2,-1)\), \((7,6)\), \((6,-6)\), \((-4,3)\), \((-3,-7)\) sont 7 points du plan,
+        d'abscisses deux à deux distinctes. Cocher la / les bonne(s) réponses :</p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>false</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <correctfeedback format="html">
+      <text>Votre réponse est correcte.</text>
+    </correctfeedback>
+    <partiallycorrectfeedback format="html">
+      <text>Votre réponse est partiellement correcte.</text>
+    </partiallycorrectfeedback>
+    <incorrectfeedback format="html">
+      <text>Votre réponse est incorrecte.</text>
+    </incorrectfeedback>
+    <shownumcorrect/>
+    <answer fraction="100" format="html">
+      <text>il existe un unique polynôme de degré 6 dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 7, dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 5 dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="-50" format="html">
+      <text>il existe un unique polynôme de degré 8 dont le graphe passe par ces 7 points</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <tags>
+      <tag><text>interpolation</text>
+</tag>
+      <tag><text>degre</text>
+</tag>
+      <tag><text>polynome</text>
+</tag>
+    </tags>
+  </question>
+
+</quiz>

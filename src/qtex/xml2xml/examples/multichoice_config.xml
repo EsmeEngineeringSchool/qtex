@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les exemples de xml2xml</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="multichoice">
+		<name><text>Exemple de type multichoice (traduction de réponse)</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Que fait la commande : <tt>who | wc -l</tt> ?]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<single>false</single>
+		<shuffleanswers>true</shuffleanswers>
+		<answernumbering>123</answernumbering>
+		<showstandardinstruction>0</showstandardinstruction>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[Elle affiche le nombre d'utilisateurs connectés]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[Elle jette le résultat de la commande <tt>who</tt]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[Elle échoue et affiche une erreur]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[Elle affiche la liste des utilisateurs connectés]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>qtex2xml</text></tag>
+			<tag><text>exemple</text></tag>
+			<tag><text>multichoice</text></tag>
+			<tag><text>template</text></tag>
+		</tags>
+	</question>
+</quiz>

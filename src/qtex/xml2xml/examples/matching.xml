@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type matching</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="matching">
+		<name><text>cut_c_matching</text></name>
+		<questiontext format="html">
+		    <text><![CDATA[Associer la commande de filtre avec son résultat lorsque <tt>chaine="eefhe"</tt>.]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<shuffleanswers>true</shuffleanswers>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c4</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>h</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c1</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>e</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c-2,5</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>eee</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c2-5</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>efhe</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c1,5</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>ee</tt>]]></text>
+			</answer>
+		</subquestion>
+		<tags>
+			<tag><text>cut</text></tag>
+			<tag><text>filtre</text></tag>
+			<tag><text>pipe</text></tag>
+			<tag><text>commandesDeBase</text></tag>
+			<tag><text>echo</text></tag>
+			<tag><text>cours04</text></tag>
+			<tag><text>cours11</text></tag>
+			<tag><text>AAS30</text></tag>
+			<tag><text>AAS77</text></tag>
+			<tag><text>AAS80</text></tag>
+		</tags>
+	</question>
+</quiz>

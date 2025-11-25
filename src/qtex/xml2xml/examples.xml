@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type numerical</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="numerical">
+		<name><text>conversions_symbolique_vers_octal_numerical</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Quelle est la représentation en octal des permissions symboliques <tt>rw-----w-</tt> ?
+
+Donner votre réponse sous forme numérique (exemple: 777)]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<unitgradingtype>0</unitgradingtype>
+		<unitpenalty>0</unitpenalty>
+		<showunits>3</showunits>
+		<unitsleft>0</unitsleft>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[602]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>droits</text></tag>
+			<tag><text>permission</text></tag>
+			<tag><text>octal</text></tag>
+			<tag><text>symbolique</text></tag>
+			<tag><text>conversion</text></tag>
+			<tag><text>cours05</text></tag>
+			<tag><text>AAS37</text></tag>
+		</tags>
+	</question>
+	<question type="category">
+        <category><text>Tous les Exemples de xml2xml/Exemple de type coderunner</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+    <!-- question: gentestmoodle.py  -->
+	<question type="coderunner">
+		<name><text>Calcul du zéro d'une fonction avec Scipy</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Dans une variable nommée \(z\), stocker un zéro de la fonction \(f\) ci-dessous, à l'aide de la librairie scipy.]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<coderunnertype>python3</coderunnertype>
+		<prototypetype>0</prototypetype>
+		<allornothing>1</allornothing>
+		<penaltyregime>0,5,10,...</penaltyregime>
+		<precheck>0</precheck>
+		<hidecheck>0</hidecheck>
+		<showsource>0</showsource>
+		<answerboxlines>4</answerboxlines>
+		<answerboxcolumns>100</answerboxcolumns>
+		<answerpreload>
+			<![CDATA[def f(x):
+    return x*x - 2]]>
+		</answerpreload>
+		<globalextra></globalextra>
+		<useace></useace>
+		<resultcolumns></resultcolumns>
+		<template><![CDATA[]]></template>
+		<iscombinatortemplate></iscombinatortemplate>
+		<allowmultiplestdins></allowmultiplestdins>
+		<answer>
+			<![CDATA[from scipy.optimize import root  
+def f(x): 
+    return x*x - 2 
+z = root(f,2)['x'][0]]]>
+		</answer>
+		<validateonsave>1</validateonsave>
+		<testsplitterre></testsplitterre>
+		<language></language>
+		<acelang></acelang>
+		<sandbox></sandbox>
+		<grader></grader>
+		<cputimelimitsecs></cputimelimitsecs>
+		<memlimitmb></memlimitmb>
+		<sandboxparams></sandboxparams>
+		<templateparams></templateparams>
+		<hoisttemplateparams>1</hoisttemplateparams>
+		<extractcodefromjson>1</extractcodefromjson>
+		<templateparamslang>None</templateparamslang>
+		<templateparamsevalpertry>0</templateparamsevalpertry>
+		<templateparamsevald>{}</templateparamsevald>
+		<twigall>0</twigall>
+		<uiplugin></uiplugin>
+		<uiparameters></uiparameters>
+		<attachments>0</attachments>
+		<attachmentsrequired>0</attachmentsrequired>
+		<maxfilesize>10240</maxfilesize>
+		<filenamesregex></filenamesregex>
+		<filenamesexplain></filenamesexplain>
+		<displayfeedback>1</displayfeedback>
+		<giveupallowed>0</giveupallowed>
+		<prototypeextra></prototypeextra>
+		<testcases>
+		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
+			<testcode>
+				<text><![CDATA[print("z" in dir())]]></text>
+			</testcode>
+			<stdin>
+				<text></text>
+			</stdin>
+			<expected>
+				<text><![CDATA[True]]></text>
+			</expected>
+			<extra>
+				<text></text>
+			</extra>
+			<display>
+				<text>SHOW</text>
+			</display>
+		</testcase>
+		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
+			<testcode>
+				<text><![CDATA[print(1.41421 <= z <= 1.41422)]]></text>
+			</testcode>
+			<stdin>
+				<text></text>
+			</stdin>
+			<expected>
+				<text><![CDATA[True]]></text>
+			</expected>
+			<extra>
+				<text></text>
+			</extra>
+			<display>
+				<text>SHOW</text>
+			</display>
+		</testcase>
+		</testcases>
+		<tags>
+			<tag><text>qtex2xml</text></tag>
+			<tag><text>exemple</text></tag>
+			<tag><text>coderunner</text></tag>
+			<tag><text>python</text></tag>
+			<tag><text>template</text></tag>
+		</tags>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type matching</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="matching">
+		<name><text>cut_c_matching</text></name>
+		<questiontext format="html">
+		    <text><![CDATA[Associer la commande de filtre avec son résultat lorsque <tt>chaine="eefhe"</tt>.]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<shuffleanswers>true</shuffleanswers>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c4</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>h</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c1</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>e</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c-2,5</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>eee</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c2-5</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>efhe</tt>]]></text>
+			</answer>
+		</subquestion>
+		<subquestion format="html">
+			<text><![CDATA[<tt>cut -c1,5</tt>]]></text>
+			<answer>
+				<text><![CDATA[<tt>ee</tt>]]></text>
+			</answer>
+		</subquestion>
+		<tags>
+			<tag><text>cut</text></tag>
+			<tag><text>filtre</text></tag>
+			<tag><text>pipe</text></tag>
+			<tag><text>commandesDeBase</text></tag>
+			<tag><text>echo</text></tag>
+			<tag><text>cours04</text></tag>
+			<tag><text>cours11</text></tag>
+			<tag><text>AAS30</text></tag>
+			<tag><text>AAS77</text></tag>
+			<tag><text>AAS80</text></tag>
+		</tags>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type multichoice</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="multichoice">
+		<name><text>substitution_chaines_multichoice</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Quelle sera la valeur affichée par <tt>echo ${chaine/z/}</tt> si <tt>chaine="embezzle"</tt> ?]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<single>false</single>
+		<shuffleanswers>true</shuffleanswers>
+		<answernumbering>123</answernumbering>
+		<showstandardinstruction>0</showstandardinstruction>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[<tt>embedzle</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[<tt>embeddle</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[<tt>embezle</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[<tt>embele</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>manipulation</text></tag>
+			<tag><text>chaine</text></tag>
+			<tag><text>substitution</text></tag>
+			<tag><text>cours10</text></tag>
+			<tag><text>AAS71</text></tag>
+			<tag><text>AAS73</text></tag>
+			<tag><text>AAS75</text></tag>
+		</tags>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type shortanswer</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="shortanswer">
+		<name><text>tailhead_shortanswer</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Soit le fichier <tt>foo</tt> suivant : 
+<tt>
+ligne1<br>
+ligne2<br>
+ligne3<br>
+ligne4<br>
+ligne5<br>
+ligne6<br>
+ligne7<br>
+ligne8<br>
+ligne9<br>
+ligne10<br>
+ligne11<br>
+ligne12<br>
+</tt>.
+Quelle(s) sera/seront la/les ligne(s) affichée(s) par <tt>cat foo | head -n 4 | tail -n 11</tt> ?
+
+Donner la réponse au format N-M (pour un intervalle de lignes sont affichées) ou juste N (si une seule ligne est affichée)]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<single>false</single>
+		<shuffleanswers>true</shuffleanswers>
+		<answernumbering>123</answernumbering>
+		<showstandardinstruction>0</showstandardinstruction>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[1-4]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>tail</text></tag>
+			<tag><text>head</text></tag>
+			<tag><text>filtre</text></tag>
+			<tag><text>pipe</text></tag>
+			<tag><text>echo</text></tag>
+			<tag><text>cours04</text></tag>
+			<tag><text>cours11</text></tag>
+			<tag><text>AAS30</text></tag>
+			<tag><text>AAS77</text></tag>
+			<tag><text>AAS80</text></tag>
+		</tags>
+	</question>
+<quiz>

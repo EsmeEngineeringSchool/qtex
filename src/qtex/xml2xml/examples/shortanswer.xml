@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type shortanswer</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="shortanswer">
+		<name><text>tailhead_shortanswer</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Soit le fichier <tt>foo</tt> suivant : 
+<tt>
+ligne1<br>
+ligne2<br>
+ligne3<br>
+ligne4<br>
+ligne5<br>
+ligne6<br>
+ligne7<br>
+ligne8<br>
+ligne9<br>
+ligne10<br>
+ligne11<br>
+ligne12<br>
+</tt>.
+Quelle(s) sera/seront la/les ligne(s) affichée(s) par <tt>cat foo | head -n 4 | tail -n 11</tt> ?
+
+Donner la réponse au format N-M (pour un intervalle de lignes sont affichées) ou juste N (si une seule ligne est affichée)]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<single>false</single>
+		<shuffleanswers>true</shuffleanswers>
+		<answernumbering>123</answernumbering>
+		<showstandardinstruction>0</showstandardinstruction>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[1-4]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>tail</text></tag>
+			<tag><text>head</text></tag>
+			<tag><text>filtre</text></tag>
+			<tag><text>pipe</text></tag>
+			<tag><text>echo</text></tag>
+			<tag><text>cours04</text></tag>
+			<tag><text>cours11</text></tag>
+			<tag><text>AAS30</text></tag>
+			<tag><text>AAS77</text></tag>
+			<tag><text>AAS80</text></tag>
+		</tags>
+	</question>
+</quiz>

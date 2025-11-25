@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<question type="category">
+        <category><text>Tous les Exemples de xml2xml/Exemple de type coderunner</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+    <!-- question: gentestmoodle.py  -->
+	<question type="coderunner">
+		<name><text>Calcul du zéro d'une fonction avec Scipy</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Dans une variable nommée \(z\), stocker un zéro de la fonction \(f\) ci-dessous, à l'aide de la librairie scipy.]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<coderunnertype>python3</coderunnertype>
+		<prototypetype>0</prototypetype>
+		<allornothing>1</allornothing>
+		<penaltyregime>0,5,10,...</penaltyregime>
+		<precheck>0</precheck>
+		<hidecheck>0</hidecheck>
+		<showsource>0</showsource>
+		<answerboxlines>4</answerboxlines>
+		<answerboxcolumns>100</answerboxcolumns>
+		<answerpreload>
+			<![CDATA[def f(x):
+    return x*x - 2]]>
+		</answerpreload>
+		<globalextra></globalextra>
+		<useace></useace>
+		<resultcolumns></resultcolumns>
+		<template><![CDATA[]]></template>
+		<iscombinatortemplate></iscombinatortemplate>
+		<allowmultiplestdins></allowmultiplestdins>
+		<answer>
+			<![CDATA[from scipy.optimize import root  
+def f(x): 
+    return x*x - 2 
+z = root(f,2)['x'][0]]]>
+		</answer>
+		<validateonsave>1</validateonsave>
+		<testsplitterre></testsplitterre>
+		<language></language>
+		<acelang></acelang>
+		<sandbox></sandbox>
+		<grader></grader>
+		<cputimelimitsecs></cputimelimitsecs>
+		<memlimitmb></memlimitmb>
+		<sandboxparams></sandboxparams>
+		<templateparams></templateparams>
+		<hoisttemplateparams>1</hoisttemplateparams>
+		<extractcodefromjson>1</extractcodefromjson>
+		<templateparamslang>None</templateparamslang>
+		<templateparamsevalpertry>0</templateparamsevalpertry>
+		<templateparamsevald>{}</templateparamsevald>
+		<twigall>0</twigall>
+		<uiplugin></uiplugin>
+		<uiparameters></uiparameters>
+		<attachments>0</attachments>
+		<attachmentsrequired>0</attachmentsrequired>
+		<maxfilesize>10240</maxfilesize>
+		<filenamesregex></filenamesregex>
+		<filenamesexplain></filenamesexplain>
+		<displayfeedback>1</displayfeedback>
+		<giveupallowed>0</giveupallowed>
+		<prototypeextra></prototypeextra>
+		<testcases>
+		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
+			<testcode>
+				<text><![CDATA[print("z" in dir())]]></text>
+			</testcode>
+			<stdin>
+				<text></text>
+			</stdin>
+			<expected>
+				<text><![CDATA[True]]></text>
+			</expected>
+			<extra>
+				<text></text>
+			</extra>
+			<display>
+				<text>SHOW</text>
+			</display>
+		</testcase>
+		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
+			<testcode>
+				<text><![CDATA[print(1.41421 <= z <= 1.41422)]]></text>
+			</testcode>
+			<stdin>
+				<text></text>
+			</stdin>
+			<expected>
+				<text><![CDATA[True]]></text>
+			</expected>
+			<extra>
+				<text></text>
+			</extra>
+			<display>
+				<text>SHOW</text>
+			</display>
+		</testcase>
+		</testcases>
+		<tags>
+			<tag><text>qtex2xml</text></tag>
+			<tag><text>exemple</text></tag>
+			<tag><text>coderunner</text></tag>
+			<tag><text>python</text></tag>
+			<tag><text>template</text></tag>
+		</tags>
+	</question>
+</quiz>

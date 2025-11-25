@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type multichoice</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="multichoice">
+		<name><text>substitution_chaines_multichoice</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Quelle sera la valeur affichée par <tt>echo ${chaine/z/}</tt> si <tt>chaine="embezzle"</tt> ?]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<single>false</single>
+		<shuffleanswers>true</shuffleanswers>
+		<answernumbering>123</answernumbering>
+		<showstandardinstruction>0</showstandardinstruction>
+		<correctfeedback format="html">
+			<text>Bravo! Votre réponse est correcte.</text>
+		</correctfeedback>
+		<partiallycorrectfeedback format="html">
+			<text>Votre réponse est partiellement correcte.</text>
+		</partiallycorrectfeedback>
+		<incorrectfeedback format="html">
+			<text>Votre réponse est incorrecte.</text>
+		</incorrectfeedback>
+		<shownumcorrect/>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[<tt>embedzle</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[<tt>embeddle</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[<tt>embezle</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0.0" format="html">
+			<text><![CDATA[<tt>embele</tt>]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>manipulation</text></tag>
+			<tag><text>chaine</text></tag>
+			<tag><text>substitution</text></tag>
+			<tag><text>cours10</text></tag>
+			<tag><text>AAS71</text></tag>
+			<tag><text>AAS73</text></tag>
+			<tag><text>AAS75</text></tag>
+		</tags>
+	</question>
+</quiz>

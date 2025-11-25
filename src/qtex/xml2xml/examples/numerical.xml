@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les Exemples de xml2xml/Exemple de type numerical</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="numerical">
+		<name><text>conversions_symbolique_vers_octal_numerical</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Quelle est la représentation en octal des permissions symboliques <tt>rw-----w-</tt> ?
+
+Donner votre réponse sous forme numérique (exemple: 777)]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>0.3333333</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<unitgradingtype>0</unitgradingtype>
+		<unitpenalty>0</unitpenalty>
+		<showunits>3</showunits>
+		<unitsleft>0</unitsleft>
+		<answer fraction="100.0" format="html">
+			<text><![CDATA[602]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>droits</text></tag>
+			<tag><text>permission</text></tag>
+			<tag><text>octal</text></tag>
+			<tag><text>symbolique</text></tag>
+			<tag><text>conversion</text></tag>
+			<tag><text>cours05</text></tag>
+			<tag><text>AAS37</text></tag>
+		</tags>
+	</question>
+</quiz>

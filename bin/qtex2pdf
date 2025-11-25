@@ -1,8 +1,13 @@
 #!/bin/bash
 qtex=$1
-build=./build
-cat templates/template_qcm_simple.tex > $build/tmp_simple.tex
-bin/qtex2latex -i $qtex >> $build/tmp_simple.tex
+[ -z "$qtex" ] && echo "Usage: $0 <input_qtex_file>" && exit 1
+build="./build"
+mkdir -p "$build"
+QTEX_SRC="/home/filipe/dev/qtex"
+template="$QTEX_SRC/src/qtex/qtex2latex/templates/template_qcm_simple.tex"
+[ ! -f "$template" ] && echo "Template not found" && exit 1
+cat ${template} > ${build}/tmp_simple.tex
+qtex2latex -i ${qtex} >> $build/tmp_simple.tex
 echo "\end{document}" >> $build/tmp_simple.tex
-pdflatex -output-directory $build $build/tmp_simple.tex #> /dev/null
+pdflatex -v -output-directory $build $build/tmp_simple.tex 
 mupdf -r 216 $build/tmp_simple.pdf #2> /dev/null &

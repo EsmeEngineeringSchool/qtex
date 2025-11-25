@@ -1,6 +1,6 @@
 import sys
-from format_qtex import types_with_requirements,same_number,infos
-from string_ import get,grep,mult
+from .format_qtex import types_with_requirements,same_number,infos
+from .string_ import get,grep,mult
 #--------------------------------------------------------------------------------------------------
 # retourne la clé présente dans le fichier qtex si il y a plusieurs possibilités.
 # La fonction retourne un tuple: le premier élément est la clé (dictionnaire) d'accès info 

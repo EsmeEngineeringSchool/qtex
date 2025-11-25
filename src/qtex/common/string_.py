@@ -1,5 +1,5 @@
 import re
-from format_qtex import entrees 
+from .format_qtex import entrees 
 
 #--------------------------------------------------------------------------------------------------
 def tab(k):

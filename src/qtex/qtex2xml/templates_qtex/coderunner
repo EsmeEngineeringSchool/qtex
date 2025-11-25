@@ -1,0 +1,13 @@
+#TYPE coderunner
+#NAME 
+#Q 
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CR_PRELOAD
+#END CR_PRELOAD
+#CR_ANSWER
+#END CR_ANSWER
+#CR_CASE_CODE
+#END CR_CASE_CODE
+#CR_CASE_MARK 1.0
+#CR_CASE_EXPECTED
+#TAGS

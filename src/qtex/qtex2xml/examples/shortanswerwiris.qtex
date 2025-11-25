@@ -1,0 +1,7 @@
+#TYPE shortanswerwiris
+#NAME Exemple de question shortanswerwiris
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#Q Donner la dérivée de \(f(x)=2x^2+3x\) 
+#ANSW_GRAD 100
+#ANSW_TEXT 4x+3
+#TAGS qtex2xml shortanswerwiris exemple template

@@ -1,0 +1,16 @@
+#TYPE matching 
+#NAME Exemple de question matching
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CFBACK Bravo! Votre réponse est correcte.
+#PFBACK Votre réponse est partiellement correcte.
+#IFBACK Votre réponse est incorrecte.
+#Q Associer chaque commande à son rôle. 
+#SUB_Q <tt>chmod 222 file1</tt>
+#SUB_Q <tt>chmod 444 file1</tt>
+#SUB_Q <tt>chmod 111 file1</tt>
+#SUB_Q <tt>chmod 000 file1</tt>
+#ANSW_TEXT Attribue que le droit d'écriture à tous
+#ANSW_TEXT Attribue que le droit de lecture à tous 
+#ANSW_TEXT Attribue que le droit d'execution à tous
+#ANSW_TEXT Attribue aucun droits à tous
+#TAGS qtex2xml exemple matching template 

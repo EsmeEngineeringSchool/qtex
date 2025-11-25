@@ -1,0 +1,11 @@
+#TYPE numerical
+#NAME Exemple de question numerical
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#Q_LONG
+Donner le résultat de $$\overline{101101}_{2}+\overline{10101}_{2}$$. 
+Vous n'écrirez que les chiffres en commençant par le premier $$1$$. 
+Par exemple, si votre réponse est $$\overline{0110011}_{2}$$, vous écrirez simplement $$110011$$.
+#END Q_LONG
+#ANSW_GRAD 100
+#ANSW_TEXT 1000010
+#TAGS qtex2xml exemple numerical template 

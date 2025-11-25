@@ -1,0 +1,12 @@
+#TYPE stack
+#NAME Exemple de question stack
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#Q_LONG
+<p><em>Ceci est une question expérimentale.</em><br></p>
+<p>On considère l'équation différentielle \(y'(t)+2y(t)^{2}=\sin(t)\).
+Déterminer la fonction \(F\) telle que \(y'(t)=F(t,y)\):</p><p>\(F(t,y)=\)
+[[input:ans1]] [[validation:ans1]]<br></p>
+#END Q_LONG
+#STACK_QVAR sol: -2*y*y+sin(t)
+#STACK_SFBACK [[feedback:prt1]]
+#TAGS qtex2xml exemple stack template 

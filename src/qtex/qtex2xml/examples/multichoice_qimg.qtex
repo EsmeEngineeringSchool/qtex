@@ -1,0 +1,23 @@
+#TYPE multichoice
+#NAME Exemple de question avec un image dans la quesion [Q_IMG]
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CFBACK Bravo! Votre réponse est correcte.
+#PFBACK Votre réponse est partiellement correcte.
+#IFBACK Votre réponse est incorrecte.
+#Q_LONG
+On se place dans le contexte du modèle proie-prédateur étudié en TD. 
+Qu'a-t-on fait pour passer de la figure gauche à la figure droite ?
+<img src="@@PLUGINFILE@@/double_diagramme.png" alt="Double digramme. 
+L'un avec des stries rapprochées (à droite), l'autre avec des écarts plus faibles 
+(à gauche)" class="img-fluid atto_image_button_text-bottom" width="800" height="320"><br></p>
+#END Q_LONG
+#Q_IMG assets/double_diagramme.png
+#ANSW_GRAD 100
+#ANSW_GRAD 0
+#ANSW_GRAD 0
+#ANSW_GRAD 0
+#ANSW_TEXT On a augmenté la valeur de \(n\) qui représente le nombre de morceaux dans le découpage de notre intervalle
+#ANSW_TEXT On a diminué la valeur de \(n\) qui représente le nombre de morceaux dans le découpage de notre intervalle
+#ANSW_TEXT On a utilisé un pas \(h\) constant au lieu d'un pas qui n'était pas constant
+#ANSW_TEXT On a pris un pas \(h\) très grand
+#TAGS * systeme methode_euler equations_differentielles

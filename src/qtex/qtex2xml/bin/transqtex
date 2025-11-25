@@ -1,0 +1,71 @@
+#!/usr/bin/python3
+import sys
+import os
+import html
+from google.cloud import translate
+sys.path.append(os.path.abspath("/home/dev/qtex2xml/bin"))
+from format_qtex import entrees 
+from string_ import get,mult,grep
+#--------------------------------------------------------------------------------------------------
+def translate_text(target: str, text: str) -> dict:
+    """Translates text into the target language.
+
+    Target must be an ISO 639-1 language code.
+    See https://g.co/cloud/translate/v2/translate-reference#supported_languages
+    """
+    from google.cloud import translate_v2 as translate
+
+    translate_client = translate.Client()
+
+    if isinstance(text, bytes):
+        text = text.decode("utf-8")
+
+    # Text can also be a sequence of strings, in which case this method
+    # will return a sequence of results for each text.
+    result = translate_client.translate(text, target_language=target)
+    return html.unescape(result["translatedText"])
+
+#--------------------------------------------------------------------------------------------------
+# main parsing function
+def parsing():
+    import os
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i','--input', type=argparse.FileType('r'),
+                        default=sys.stdin,help='input file (single file)',required=True)
+    parser.add_argument('-o','--output', nargs='?', type=argparse.FileType('w'),
+                        default=sys.stdout, help='output file or stdout')
+    args = parser.parse_args()
+
+    output=args.output
+    path=os.path.dirname(args.input.name)+'/'
+    file=args.input
+    return path,file,output
+
+
+#--------------------------------------------------------------------------------------------------
+if __name__=="__main__":
+
+    path,file,output=parsing()
+
+    data=file.read()
+    for cle in entrees.keys():
+        if not grep(cle,data) : continue # la clé n'est pas trouvé cherchons en une autre
+        text = get(cle,data) 
+        if not isinstance(text,list) : text=[text] # liste d'un élément simplifie l'algo
+        if entrees[cle]['long'] :
+            for t in text :
+                print('#'+cle+' ',file=output)
+                if entrees[cle]['translation']:
+                    print(translate_text("en",t),file=output)
+                else:
+                    print(t,file=output)
+                print('#END '+cle,file=output)
+        else:
+            for t in text :
+                print('#'+cle+' ',end='',file=output)
+                if entrees[cle]['translation']:
+                    print(translate_text("en",t),file=output)
+                else:
+                    print(t,file=output)
+

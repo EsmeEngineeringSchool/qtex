@@ -1,0 +1,56 @@
+#!/bin/bash
+
+header_category()
+{
+    cat > $1 << EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 0  -->
+<question type="category">
+    <category><text>$2</text></category>
+    <info format="html"><text></text></info>
+    <idnumber></idnumber>
+</question>
+EOF
+}
+
+usage()
+{
+    echo "Usage: $0 <rep or list of files> <xml_outfile>"
+    exit 1
+}
+# tests des arguments
+[ $# -ne 2 ] && usage
+[ ! -d $1 ] && [ ! -f $1 ] && echo "Erreur: $1 n'est ni un répertoire ni un fichier" && usage
+if [ -e $2 ] 
+then
+    echo "Erreur: le fichier $1 existe" 
+    read -p "Ecraser le contenu de $2 [O/n] " choix
+    choix=${choix:-O}
+    case $choix in
+        N|n|non)
+            exit 1
+            ;;
+        *)
+            ;;
+    esac    
+fi
+#
+xmlout=$2
+if [ -d $1 ]
+then 
+    files=$1/*.xml
+    category=$(grep -oP "(?<=\#CAT ).*" $1/category)
+fi
+if [ -f $1 ]
+then 
+    files=$(cat $1 | tail -n +2 )
+    [ ! -e $(head -n 1 $1) ] && echo "Erreur: $(head -n 1 $1) n'est pas un fichier" 
+    grep -qE "#CAT" $(head -n 1 $1)
+    [ $? -ne 0 ] && echo "$(head -n 1 $1) n'est pas un fichier category"
+    category=$(grep -oP "(?<=\#CAT ).*" $(head -n 1 $1))
+fi
+echo $category
+header_category $xmlout "$category"
+cat $files >> $xmlout
+echo "</quiz>" >> $xmlout

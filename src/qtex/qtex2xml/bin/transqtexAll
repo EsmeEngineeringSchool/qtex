@@ -1,0 +1,23 @@
+#!/bin/bash
+usage()
+{
+    echo "Usage : $(basename $0) <dir> <dirout>"
+    exit 1
+}
+dir=$(basename $1)
+dirout=$(basename $2)
+[ -z $dirout ] && echo "you should give dir/output" && usage 
+for file in  $(find ${dir} -name '*.qtex'); 
+do
+    path=$(dirname $file)
+    base=$(basename $file)
+    pathout=${path/${dir}/${dirout}} && mkdir -p ${pathout}
+    baseout=${base::-5}_en.qtex
+    if [ ${base} == "category.qtex" ] 
+    then
+        cp ${file} ${pathout}/${base}
+    fi
+    fileout=${pathout}/${baseout}
+    echo "$base -> $baseout"
+    transqtex -i ${file} -o ${fileout}
+done

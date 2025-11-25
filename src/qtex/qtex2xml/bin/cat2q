@@ -1,0 +1,43 @@
+#!/bin/bash
+usage()
+{
+    echo "Usage: $0 <xml_category> <rep> <prefix>"
+    exit 1
+}
+# tests des arguments
+[ $# -ne 3 ] && usage
+[ ! -f $1 ] && echo "Erreur: $1 n'est pas un fichier" && usage
+grep -qE "<?xml" $1
+[ $? -ne 0 ] && echo "Erreur: $1 n'est pas un fichier xml" && usage
+grep -qE "<question type=\"category\">" $1
+[ $? -ne 0 ] && echo "Erreur: $1 n'est pas un fichier xml de catégorie" && usage
+
+xml_category=$1
+rep=$2
+mkdir -p $rep
+echo "#CAT $(grep -oP "(?<=\<category\><text>).*(?=\<\/text\>\<\/category\>)" $xml_category )" > $rep/category.qtex
+prefix=$3
+
+qk=0 #index de la question
+write_status=false
+while read line
+do
+    if [[ $line =~ "<question " ]] 
+    then
+        iscat=$(echo $var | grep -E "category")
+        if ! [[ $line =~ "category" ]]
+        then
+            echo $line
+            write_status=true
+            qk=$((qk+1))
+            touch $rep/${prefix}_${qk}.xml
+        fi
+    fi
+    if [ "$write_status" == true ]
+    then
+        if ! [[ $line =~ "quiz" ]] && ! [[ $line =~ "<!-- " ]]
+        then
+            echo $line >> $rep/${prefix}_${qk}.xml
+        fi
+    fi
+done < $xml_category

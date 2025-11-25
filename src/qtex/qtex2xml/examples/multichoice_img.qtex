@@ -1,0 +1,16 @@
+#TYPE multichoice
+#NAME Exemple de question multichoice avec des images dans les réponses 
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CFBACK Bravo! Votre réponse est correcte.
+#PFBACK Votre réponse est partiellement correcte.
+#IFBACK Votre réponse est incorrecte.
+#Q Cocher le champ de vecteurs correspondant à l'équation différentielle \(y'(t)=y(t)\)
+#ANSW_GRAD 100
+#ANSW_GRAD 0
+#ANSW_GRAD 0
+#ANSW_GRAD 0
+#ANSW_IMG assets/champ_1.png 640 480
+#ANSW_IMG assets/champ_2.png 640 480
+#ANSW_IMG assets/champ_3.png 640 480
+#ANSW_IMG assets/champ_4.png 640 480
+#TAGS qtex2xml exemple image multichoice template 

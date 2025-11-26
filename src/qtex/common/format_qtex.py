@@ -33,7 +33,8 @@ entrees={'TYPE'                    :{'long':False,'translation':False,'multiple'
          'CR_TEMPLATE'             :{'long':True ,'translation':False,'multiple':False},
          'CR_ANSWER'               :{'long':True ,'translation':False,'multiple':False},
          'CR_CASE_MARK'            :{'long':False,'translation':False,'multiple':True },
-         'CR_CASE_CODE'            :{'long':True ,'translation':False,'multiple':True },
+         'CR_CASE_CODE'            :{'long':False,'translation':False,'multiple':True },
+         'CR_CASE_CODE_LONG'       :{'long':True ,'translation':False,'multiple':True },
          'CR_CASE_STDIN'           :{'long':False,'translation':False,'multiple':True },
          'CR_CASE_DISPLAY'         :{'long':False,'translation':False,'multiple':True },
          'CR_CASE_EXTRA'           :{'long':False,'translation':False,'multiple':True },
@@ -49,9 +50,21 @@ globalinfo           = ['TYPE','NAME']
 questioninfo         = [('Q','Q_LONG'),('GFBACK','GFBACK_LONG'),'TAGS','Q_IMG']
 multichoiceinfo      = ['CFBACK','PFBACK','IFBACK','ANSW_FBACK','ANSW_GRAD',('ANSW_TEXT','ANSW_TEXT_LONG'),'ANSW_IMG']
 numericalinfo        = ['ANSW_FBACK','ANSW_GRAD','ANSW_TEXT']
-coderunnerinfo       = ['CR_TYPE','CR_ACELANG','CR_TWIGALL','CR_PENALTYREGIME','CR_ISCOMBINATORTEMPLATE','CR_TEMPLATE',\
-                        'CR_PRELOAD','CR_ANSWER','CR_CASE_MARK','CR_CASE_CODE',('CR_CASE_EXPECTED','CR_CASE_EXPECTED_LONG'),\
-                        'CR_CASE_DISPLAY','CR_CASE_STDIN','CR_CASE_EXTRA','CR_CASE_ASEXAMPLE']
+coderunnerinfo       = ['CR_TYPE',\
+                        'CR_ACELANG',\
+                        'CR_TWIGALL',\
+                        'CR_PENALTYREGIME',\
+                        'CR_ISCOMBINATORTEMPLATE',\
+                        'CR_TEMPLATE',\
+                        'CR_PRELOAD',\
+                        'CR_ANSWER',\
+                        'CR_CASE_MARK',\
+                        ('CR_CASE_CODE','CR_CASE_CODE_LONG'),\
+                        ('CR_CASE_EXPECTED','CR_CASE_EXPECTED_LONG'),\
+                        'CR_CASE_DISPLAY',\
+                        'CR_CASE_STDIN',\
+                        ('CR_CASE_EXTRA','CR_CASE_EXTRA_LONG'),\
+                        'CR_CASE_ASEXAMPLE']
 stackinfo            = ['STACK_QVAR','STACK_SFBACK']
 shortanswerwirisinfo = ['ANSW_FBACK','ANSW_GRAD','ANSW_TEXT']
 multichoicewirisinfo = []

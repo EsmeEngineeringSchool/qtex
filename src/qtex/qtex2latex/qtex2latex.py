@@ -12,8 +12,11 @@ def newline(size="0.2cm"):
     else:
         return f"\n"
 # --------------------------------------------------------------------------
-def benv(name):
-    return "\\begin{"f"{name}""}"+newline('')
+def benv(name,options=False):
+    if not options :
+        return "\\begin{"f"{name}""}"+newline('')
+    else:
+        return "\\begin{"f"{name}""}"
 # --------------------------------------------------------------------------
 def eenv(name):
     return "\\end{"f"{name}""}"+newline('')
@@ -86,13 +89,20 @@ def matching_to_latex(info,outfile,corrige=True):
 def coderunner_to_latex(info,outfile,numlines=18):
     outfile.write(macro("question",info["Q"])+newline())
     outfile.write(benv("tikzpicture"))
-    outfile.write(cmd('draw')+"[ultra thick,inner sep=0] (0,0) rectangle (\linewidth,"+f"{numlines*0.5}cm)"+";\n")
-    outfile.write(cmd('draw')+"[gray!40] (0,0) grid[step=0.5cm](\linewidth,"+f"{numlines*0.5}cm)"+";\n")
+    outfile.write(cmd('draw')+"[gray!40] (0,0) grid[step=0.5cm](16.5cm,"+f"{numlines*0.5}cm)"+";\n")
+    outfile.write(cmd('draw')+"[ultra thick,inner sep=0] (0,0) rectangle (16.5cm,"+f"{numlines*0.5}cm)"+";\n")
+    numline=numlines*0.5
+    range_for=','.join([f"{numlines*0.5-k*0.5}" for k in range(1,3)])+',...,0.0} {\n'
+    outfile.write(cmd('foreach')+' '+cmd('y')+'[count='+cmd('n')+'] in {'+f"{range_for}")
+    outfile.write(cmd('node')+"[anchor=east, font=\\ttfamily\small,align=right] at (-0.1,"+cmd('y')+') {'+cmd('n')+"};\n")
+    outfile.write("}\n")
+    outfile.write(cmd('node')+"[anchor=north west, font=\\ttfamily\small,inner sep=0] at (0.1,"+f"{numline}cm"+"+0.5ex) {"+\
+                  benv("minipage",options=True)+'{\linewidth}\n'+\
+                  benv("lstlisting",options=True)+'[style=colorPython,language=Python]\n'+\
+                  info['CR_PRELOAD']+\
+                  eenv("lstlisting")+\
+                  eenv("minipage")+"};\n")
     outfile.write(eenv("tikzpicture"))
-                #\begin{tikzpicture}
-                #    \draw[ultra thick,inner sep=0] (0,0) rectangle (\linewidth,\sizegrid);
-                #    \draw[gray!40] (0,0) grid[step=0.5cm](\linewidth,\sizegrid);
-                #\end{tikzpicture}
 # --------------------------------------------------------------------------
 def qtex_to_latex(info,outfile):
     match info["TYPE"]:
@@ -101,7 +111,7 @@ def qtex_to_latex(info,outfile):
         case "matching":
             matching_to_latex(info,outfile)
         case "coderunner":
-            coderunner_to_latex(info,outfile)
+            coderunner_to_latex(info,outfile,numlines=int(info['answerboxlines']))
         case _:
             print(f"{info['TYPE']}->latex not possible")
 #--------------------------------------------------------------------------------------------------
@@ -130,11 +140,14 @@ def html_to_tex(info):
     filters+=[lambda t : re.sub(r"{", r"\{", t)]
     filters+=[lambda t : re.sub(r"}", r"\}", t)]
     filters+=[lambda t : re.sub(r"<tt>(.*?)</tt>", r"\\texttt{\1}", t)]
+    filters+=[lambda t : re.sub(r"<p>(.*?)</p>", r"\1", t, flags=re.DOTALL)]
+    filters+=[lambda t : re.sub(r"<pre>(.*?)</pre>", r"\\begin{verbatim}\n\1\\end{verbatim}", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"\$", r"\\$", t)]
     filters+=[lambda t : re.sub(r"&dollar;", r"\\\$", t)]
     for key in info :
         for f in filters:
             if info[key] is not None :
+    #            print(key,info[key])
                 if isinstance(info[key],list):
                     if all(e is not None for e in info[key]) :
                         info[key]=list(map(f,info[key]))

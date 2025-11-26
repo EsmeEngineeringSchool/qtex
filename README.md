@@ -22,4 +22,7 @@ Le script parcourt récursivement le répertoire indiqué, fusionne tous les fic
 Chaque fichier est intégré à l'intérieur d'une balise `<quiz>...</quiz>` complète.
 
 
+## TODO
+Les scripts de filtre du type `html2tex` et `tex2html` pourrait aller dans `qtex/common/`
+
 [^1]: Ce dépôt est le résultat de la fusion de trois précédents dépôts maintenant disparus de https://github.com/EsmeEngineeringSchool/ 

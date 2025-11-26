@@ -9,6 +9,26 @@
 \usepackage{url}
 \usepackage{xargs}
 \usepackage{ifthen}
+\usepackage{listings}
+\lstset{
+    basicstyle=\linespread{1.25}\ttfamily\small,
+    lineskip=0.84ex,
+    tabsize=4,
+    columns=fullflexible,
+    keepspaces=true,
+}
+\lstdefinestyle{colorPython}{
+    language=Python,
+    basicstyle=\ttfamily\small,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green!60!black}\itshape,
+    stringstyle=\color{orange},
+    numberstyle=\tiny\color{gray},
+    identifierstyle=\color{black},
+    emphstyle=\color{red},
+    showstringspaces=false,
+    breaklines=true
+}
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}
 \usetikzlibrary{calc}

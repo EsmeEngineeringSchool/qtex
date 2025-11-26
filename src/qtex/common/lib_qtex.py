@@ -54,7 +54,7 @@ def default_values_before(data):
             if not grep("CR_CASE_DISPLAY",data)          : info["CR_CASE_DISPLAY"] = ["SHOW"]*m
             if not grep("CR_CASE_STDIN",data)            : info["CR_CASE_STDIN"] = [""]*m
             if not grep("CR_CASE_EXTRA",data)            : info["CR_CASE_EXTRA"] = [""]*m
-            info["answerboxlines"]=str(int((get("CR_ANSWER",data).count("\n")+1)*1.2))
+            info["answerboxlines"]=str(int((get("CR_ANSWER",data).count("\n")+1)*1.25))
     return info
 
 def check_values_after(info):

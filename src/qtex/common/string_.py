@@ -25,7 +25,7 @@ def rmnewlinesboth(x):
 def get(pattern,data):
     if entrees[pattern]["long"] :
         # Récupérer la chaine de caractères entre les champ #{pattern} et  #END {pattern}
-        regex=f"(?<=\#{pattern}\s|\#{pattern}\n).*?(?=\#END {pattern}.*)"
+        regex=f"(?<=\#{pattern}\s|\#{pattern}\n)(.*)?(?=\#END {pattern}.*)"
         if entrees[pattern]["multiple"] :
             return rmnewlinesboth(re.findall(regex,data,re.DOTALL))
         else:  

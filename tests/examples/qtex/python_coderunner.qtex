@@ -4,6 +4,8 @@
 #Q Dans une variable nommée \(z\), stocker un zéro de la fonction \(f\) ci-dessous, à l'aide de la librairie scipy.
 #GFBACK Merci d'avoir pris le temps de répondre à cette question.
 #CR_PRELOAD
+
+
 def f(x):
     return x*x - 2
 #END CR_PRELOAD

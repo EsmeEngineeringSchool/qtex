@@ -2,7 +2,7 @@
 import sys
 import os
 from qtex.common.format_qtex import infos, entrees, types_with_requirements, same_number
-from qtex.common.string_     import get, mult, grep, tab
+from qtex.common.string_     import tab
 from qtex.common.conversion  import png_to_base64
 from qtex.common.lib_qtex    import quellecle, readqtex, default_values_before
 

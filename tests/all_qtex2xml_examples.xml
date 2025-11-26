@@ -8,44 +8,130 @@
 	</question>
 	<!-- question: gentestmoodle.py  -->
 	<question type="coderunner">
-		<name><text>Exemple de question coderunner pour bash</text></name>
+		<name><text>Exemple de question coderunner (bash)</text></name>
 		<questiontext format="html">
-			<text><![CDATA[Write bash code to list the names of all files in the current directory 
-that have an extension of .txt. Files are listed 1 per line, in alphabetical order.]]></text>
+			<text><![CDATA[<p>Écrire un script nommé <code>analyser</code> qui doit calculer le nombre de
+  fichiers standard, de sous-répertoires, et d'exécutables d'un répertoire
+  quelconque qui sera donné en paramètre.</p>
+<p>Le répertoire ci-dessous (et d'autres caché) sera utiliser pour tester votre
+  script :</p>
+<pre>rep_exemple/
+    fichier_std1 (fichier standard)
+    fichier_std2 (fichier standard)
+    fichier_exe  (fichier executable)
+    sous_rep1/   (sous répertoire)
+    sous_rep2/   (sous répertoire)
+</pre>]]></text>
 		</questiontext>
 		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
 		<defaultgrade>1.0000000</defaultgrade>
 		<penalty>0.3333333</penalty>
 		<hidden>0</hidden>
 		<idnumber></idnumber>
-		<coderunnertype>python3</coderunnertype>
+		<coderunnertype>bash</coderunnertype>
 		<prototypetype>0</prototypetype>
 		<allornothing>1</allornothing>
 		<penaltyregime>0,5,10,...</penaltyregime>
 		<precheck>0</precheck>
 		<hidecheck>0</hidecheck>
 		<showsource>0</showsource>
-		<answerboxlines>1</answerboxlines>
+		<answerboxlines>38</answerboxlines>
 		<answerboxcolumns>100</answerboxcolumns>
 		<answerpreload>
-			<![CDATA[]]>
+			<![CDATA[#!/bin/bash]]>
 		</answerpreload>
 		<globalextra></globalextra>
 		<useace></useace>
 		<resultcolumns></resultcolumns>
-		<template><![CDATA[import subprocess
+		<template><![CDATA[""" The template for a question type that compiles and runs a student-submitted^M
+    bash script.
+"""
+import subprocess, sys, os
 
-script = """{{ TEST.testcode | e('py') }}""" + '\n' + """{{ STUDENT_ANSWER | e('py') }}"""
-input = """{{ TEST.stdin | e('py') }}"""
+os.mkdir("./rep_exemple")
+open("rep_exemple/fichier_std1", "w").close()
+open("rep_exemple/fichier_std2", "w").close()
+open("rep_exemple/fichier_exe", "w").close()
+os.chmod("rep_exemple/fichier_exe", 0o755)
+os.mkdir("./rep_exemple/sous_rep1")
+os.mkdir("./rep_exemple/sous_rep2")
 
-with open('__prog__.sh', 'w') as outfile:
-    outfile.write(script)
+os.mkdir("./tmp")
+open("tmp/f1", "w").close()
+open("tmp/f2", "w").close()
+open("tmp/f3", "w").close()
+open("tmp/f4", "w").close()
+os.chmod("tmp/f2", 0o755)
+os.chmod("tmp/f3", 0o755)
+os.mkdir("tmp/r1")
+os.mkdir("tmp/r2")
+os.mkdir("tmp/r3")
 
-subprocess.run(['/bin/bash', '__prog__.sh'], text=True, input=input)]]></template>
-		<iscombinatortemplate>0</iscombinatortemplate>
+script_name="./analyser"
+
+# Write the student code to a file script-etu.sh^M
+student_answer = """{{ STUDENT_ANSWER | e('py') }}"""
+with open(script_name, "w") as src:
+    print(student_answer, file=src)
+
+os.chmod(script_name, 0o755)
+
+# Run the code. Since this is a per-test template,
+# stdin is already set up for the stdin text specified in the test case,
+# so we can run the compiled program directly.
+try:
+    args = [script_name]
+    if len("{{ TEST.stdin  }}") :
+        args.append("{{ TEST.stdin  }}")
+    output = subprocess.check_output(args, universal_newlines=True)
+    print(output)
+except subprocess.CalledProcessError as e:
+    if e.returncode > 0:
+        # Ignore non-zero positive return codes
+        if e.output:
+            print(e.output)
+    else:
+        # But negative return codes are signals - abort
+        if e.output:
+            print(e.output, file=sys.stderr)
+        if e.returncode < 0:
+            print("Task failed with signal", -e.returncode, file=sys.stderr)
+        print("** Further testing aborted **", file=sys.stderr)]]></template>
+		<iscombinatortemplate></iscombinatortemplate>
 		<allowmultiplestdins></allowmultiplestdins>
 		<answer>
-			<![CDATA[{"answer_code":["ls *.txt"],"test_code":[""],"show_hide":[""],"prefix_ans":["1"]}]]>
+			<![CDATA[#!/bin/bash
+usage()
+{
+    echo "Usage: $0 <rep>"
+    exit 1
+}
+[ "$#" -lt 1 ] && usage
+
+rep=$1
+c_dir=0
+c_file=0
+c_exe=0
+for file in ${rep}/*
+do
+        if [ -d ${file} ]
+        then
+            echo "${file} est un sous-répertoire"
+            c_dir=$((c_dir+1))
+        fi
+        if [ -f ${file} ]
+        then
+            if [ -x ${file} ]
+            then
+                echo "${file} est un fichier exécutable"
+                c_exe=$((c_exe+1))
+            else
+                echo "${file} est un fichier standard"
+                c_file=$((c_file+1))
+            fi
+        fi
+done
+echo "${rep}: dir: ${c_dir} file: ${c_file} file_exe: ${c_exe}"]]>
 		</answer>
 		<validateonsave>1</validateonsave>
 		<testsplitterre></testsplitterre>
@@ -76,16 +162,13 @@ subprocess.run(['/bin/bash', '__prog__.sh'], text=True, input=input)]]></templat
 		<testcases>
 		<testcase testtype="0" useasexample="1" hiderestiffail="0" mark="1.0">
 			<testcode>
-				<text><![CDATA[touch thing.txt
-touch wrong.ext
-touch another.txt]]></text>
+				<text><![CDATA[./analyser]]></text>
 			</testcode>
 			<stdin>
 				<text></text>
 			</stdin>
 			<expected>
-				<text><![CDATA[another.txt
-thing.txt]]></text>
+				<text><![CDATA[Usage: ./analyser <rep>]]></text>
 			</expected>
 			<extra>
 				<text></text>
@@ -96,15 +179,18 @@ thing.txt]]></text>
 		</testcase>
 		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
 			<testcode>
-				<text><![CDATA[touch dumbo2.txt
-touch dumbo1.txt]]></text>
+				<text><![CDATA[./analyser]]></text>
 			</testcode>
 			<stdin>
-				<text></text>
+				<text>rep_exemple</text>
 			</stdin>
 			<expected>
-				<text><![CDATA[dumbo1.txt
-dumbo2.txt]]></text>
+				<text><![CDATA[rep_exemple/fichier_exe est un fichier exécutable
+rep_exemple/fichier_std1 est un fichier standard
+rep_exemple/fichier_std2 est un fichier standard
+rep_exemple/sous_rep1 est un sous-répertoire
+rep_exemple/sous_rep2 est un sous-répertoire
+rep_exemple: dir: 2 file: 2 file_exe: 1]]></text>
 			</expected>
 			<extra>
 				<text></text>
@@ -113,19 +199,44 @@ dumbo2.txt]]></text>
 				<text>SHOW</text>
 			</display>
 		</testcase>
+		<testcase testtype="0" useasexample="1" hiderestiffail="0" mark="1.0">
+			<testcode>
+				<text><![CDATA[./analyser]]></text>
+			</testcode>
+			<stdin>
+				<text>tmp</text>
+			</stdin>
+			<expected>
+				<text><![CDATA[tmp/f1 est un fichier standard
+tmp/f2 est un fichier exécutable
+tmp/f3 est un fichier exécutable
+tmp/f4 est un fichier standard
+tmp/r1 est un sous-répertoire
+tmp/r2 est un sous-répertoire
+tmp/r3 est un sous-répertoire
+tmp: dir: 3 file: 2 file_exe: 2]]></text>
+			</expected>
+			<extra>
+				<text></text>
+			</extra>
+			<display>
+				<text>HIDE</text>
+			</display>
+		</testcase>
 		</testcases>
 		<tags>
 			<tag><text>qtex2xml</text></tag>
 			<tag><text>exemple</text></tag>
-			<tag><text>bash</text></tag>
+			<tag><text>coderunner</text></tag>
+			<tag><text>python</text></tag>
 			<tag><text>template</text></tag>
 		</tags>
 	</question>
 	<!-- question: gentestmoodle.py  -->
 	<question type="matching">
-		<name><text>Exemple de question matching</text></name>
+		<name><text>extraction_chaines_matching</text></name>
 		<questiontext format="html">
-			<text><![CDATA[Associer chaque commande à son rôle.]]></text>
+			<text><![CDATA[Associer la commande d'extraction de sous-chaine avec son résultat lorsque <tt>chaine="vlhburdfs"</tt>.]]></text>
 		</questiontext>
 		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
 		<defaultgrade>1.0000000</defaultgrade>
@@ -144,34 +255,37 @@ dumbo2.txt]]></text>
 		</incorrectfeedback>
 		<shownumcorrect/>
 		<subquestion format="html">
-			<text><![CDATA[<tt>chmod 222 file1</tt>]]></text>
+			<text><![CDATA[<tt>echo ${chaine:6:2}</tt>]]></text>
 			<answer>
-				<text>Attribue que le droit d'écriture à tous</text>
+				<text><![CDATA[<tt>df</tt>]]></text>
 			</answer>
 		</subquestion>
 		<subquestion format="html">
-			<text><![CDATA[<tt>chmod 444 file1</tt>]]></text>
+			<text><![CDATA[<tt>echo ${chaine:0:4}</tt>]]></text>
 			<answer>
-				<text>Attribue que le droit de lecture à tous</text>
+				<text><![CDATA[<tt>vlhb</tt>]]></text>
 			</answer>
 		</subquestion>
 		<subquestion format="html">
-			<text><![CDATA[<tt>chmod 111 file1</tt>]]></text>
+			<text><![CDATA[<tt>echo ${chaine:7:2}</tt>]]></text>
 			<answer>
-				<text>Attribue que le droit d'execution à tous</text>
+				<text><![CDATA[<tt>fs</tt>]]></text>
 			</answer>
 		</subquestion>
 		<subquestion format="html">
-			<text><![CDATA[<tt>chmod 000 file1</tt>]]></text>
+			<text><![CDATA[<tt>echo ${chaine:3:3}</tt>]]></text>
 			<answer>
-				<text>Attribue aucun droits à tous</text>
+				<text><![CDATA[<tt>bur</tt>]]></text>
 			</answer>
 		</subquestion>
 		<tags>
-			<tag><text>qtex2xml</text></tag>
-			<tag><text>exemple</text></tag>
-			<tag><text>matching</text></tag>
-			<tag><text>template</text></tag>
+			<tag><text>manipulation</text></tag>
+			<tag><text>chaine</text></tag>
+			<tag><text>extraction</text></tag>
+			<tag><text>cours10</text></tag>
+			<tag><text>AAS71</text></tag>
+			<tag><text>AAS73</text></tag>
+			<tag><text>AAS75</text></tag>
 		</tags>
 	</question>
 	<!-- question: gentestmoodle.py  -->
@@ -270,28 +384,28 @@ L'un avec des stries rapprochées (à droite), l'autre avec des écarts plus fai
 		</incorrectfeedback>
 		<shownumcorrect/>
 		<answer fraction="100" format="html">
-			<text>On a augmenté la valeur de \(n\) qui représente le nombre de morceaux dans le découpage de notre intervalle</text>
+			<text><![CDATA[On a augmenté la valeur de \(n\) qui représente le nombre de morceaux dans le découpage de notre intervalle]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<answer fraction="0" format="html">
-			<text>On a diminué la valeur de \(n\) qui représente le nombre de morceaux dans le découpage de notre intervalle</text>
+			<text><![CDATA[On a diminué la valeur de \(n\) qui représente le nombre de morceaux dans le découpage de notre intervalle]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<answer fraction="0" format="html">
-			<text>On a utilisé un pas \(h\) constant au lieu d'un pas qui n'était pas constant</text>
+			<text><![CDATA[On a utilisé un pas \(h\) constant au lieu d'un pas qui n'était pas constant]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<answer fraction="0" format="html">
-			<text>On a pris un pas \(h\) très grand</text>
+			<text><![CDATA[On a pris un pas \(h\) très grand]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
@@ -330,35 +444,35 @@ L'un avec des stries rapprochées (à droite), l'autre avec des écarts plus fai
 		</incorrectfeedback>
 		<shownumcorrect/>
 		<answer fraction="33.33333" format="html">
-			<text>SciPy</text>
+			<text><![CDATA[SciPy]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<answer fraction="33.33333" format="html">
-			<text>NumPy</text>
+			<text><![CDATA[NumPy]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<answer fraction="33.33333" format="html">
-			<text>Matplotlib</text>
+			<text><![CDATA[Matplotlib]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<answer fraction="0.0" format="html">
-			<text>Theano</text>
+			<text><![CDATA[Theano]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
 			<tolerance>0.0</tolerance>
 		</answer>
 		<tags>
-			<tag><text>qtex2xml</text></tag>
+			<tag><text>qtex2latex</text></tag>
 			<tag><text>exemple</text></tag>
 			<tag><text>multichoice</text></tag>
 			<tag><text>template</text></tag>
@@ -382,7 +496,7 @@ Par exemple, si votre réponse est $$\overline{0110011}_{2}$$, vous écrirez sim
 		<showunits>3</showunits>
 		<unitsleft>0</unitsleft>
 		<answer fraction="100" format="html">
-			<text>1000010</text>
+			<text><![CDATA[1000010]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
@@ -460,24 +574,10 @@ z = root(f,2)['x'][0]]]>
 		<testcases>
 		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
 			<testcode>
-				<text><![CDATA[print("z" in dir())]]></text>
-			</testcode>
-			<stdin>
-				<text></text>
-			</stdin>
-			<expected>
-				<text><![CDATA[True]]></text>
-			</expected>
-			<extra>
-				<text></text>
-			</extra>
-			<display>
-				<text>SHOW</text>
-			</display>
-		</testcase>
-		<testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0">
-			<testcode>
-				<text><![CDATA[print(1.41421 <= z <= 1.41422)]]></text>
+				<text><![CDATA[print("z" in dir())
+#END CR_CASE_CODE
+#CR_CASE_CODE_LONG
+print(1.41421 <= z <= 1.41422)]]></text>
 			</testcode>
 			<stdin>
 				<text></text>
@@ -527,7 +627,7 @@ z = root(f,2)['x'][0]]]>
 		</incorrectfeedback>
 		<shownumcorrect/>
 		<answer fraction="100.0" format="html">
-			<text>quatre</text>
+			<text><![CDATA[quatre]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>
@@ -553,7 +653,7 @@ z = root(f,2)['x'][0]]]>
 		<idnumber></idnumber>
 		<usecase>1</usecase>
 		<answer fraction="100" format="html">
-			<text>4x+3</text>
+			<text><![CDATA[4x+3]]></text>
 			<feedback format="html">
 				<text></text>
 			</feedback>

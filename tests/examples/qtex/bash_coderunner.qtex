@@ -1,47 +1,26 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<quiz>
-<!-- question: 4763771  -->
-  <question type="coderunner">
-    <name>
-      <text>Analyser un répertoire</text>
-    </name>
-    <questiontext format="html">
-      <text><![CDATA[<p>Écrire un script nommé <code>analyser</code> qui doit calculer le nombre de fichiers standard, de sous-répertoires, et d'exécutables d'un répertoire quelconque qui sera donné en paramètre.</p>
-<p>Le répertoire ci-dessous (et d'autres caché) sera utiliser pour tester votre script :</p>
+#TYPE coderunner
+#CR_TYPE bash
+#NAME Exemple de question coderunner (bash)
+#Q_LONG
+<p>Écrire un script nommé <code>analyser</code> qui doit calculer le nombre de
+  fichiers standard, de sous-répertoires, et d'exécutables d'un répertoire
+  quelconque qui sera donné en paramètre.</p>
+<p>Le répertoire ci-dessous (et d'autres caché) sera utiliser pour tester votre
+  script :</p>
 <pre>rep_exemple/
     fichier_std1 (fichier standard)
     fichier_std2 (fichier standard)
     fichier_exe  (fichier executable)
     sous_rep1/   (sous répertoire)
     sous_rep2/   (sous répertoire)
-</pre>]]></text>
-    </questiontext>
-    <generalfeedback format="html">
-      <text><![CDATA[<pre> </pre>]]></text>
-    </generalfeedback>
-    <defaultgrade>1</defaultgrade>
-    <penalty>0</penalty>
-    <hidden>0</hidden>
-    <idnumber></idnumber>
-    <coderunnertype>bash</coderunnertype>
-    <prototypetype>0</prototypetype>
-    <allornothing>1</allornothing>
-    <penaltyregime>10, 20, ...</penaltyregime>
-    <precheck>0</precheck>
-    <hidecheck>0</hidecheck>
-    <showsource>0</showsource>
-    <answerboxlines>18</answerboxlines>
-    <answerboxcolumns>100</answerboxcolumns>
-    <answerpreload>#!/bin/bash</answerpreload>
-    <globalextra></globalextra>
-    <useace></useace>
-    <resultcolumns></resultcolumns>
-    <template><![CDATA[""" The template for a question type that compiles and runs a student-submitted
+</pre>
+#END Q_LONG 
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CR_TEMPLATE
+""" The template for a question type that compiles and runs a student-submitted^M
     bash script.
 """
-
 import subprocess, sys, os
-
 
 os.mkdir("./rep_exemple")
 open("rep_exemple/fichier_std1", "w").close()
@@ -64,7 +43,7 @@ os.mkdir("tmp/r3")
 
 script_name="./analyser"
 
-# Write the student code to a file script-etu.sh
+# Write the student code to a file script-etu.sh^M
 student_answer = """{{ STUDENT_ANSWER | e('py') }}"""
 with open(script_name, "w") as src:
     print(student_answer, file=src)
@@ -91,10 +70,13 @@ except subprocess.CalledProcessError as e:
             print(e.output, file=sys.stderr)
         if e.returncode < 0:
             print("Task failed with signal", -e.returncode, file=sys.stderr)
-        print("** Further testing aborted **", file=sys.stderr)]]></template>
-    <iscombinatortemplate></iscombinatortemplate>
-    <allowmultiplestdins></allowmultiplestdins>
-    <answer><![CDATA[#!/bin/bash
+        print("** Further testing aborted **", file=sys.stderr)
+#END CR_TEMPLATE
+#CR_PRELOAD
+#!/bin/bash
+#END CR_PRELOAD
+#CR_ANSWER
+#!/bin/bash
 usage()
 {
     echo "Usage: $0 <rep>"
@@ -125,84 +107,34 @@ do
             fi
         fi
 done
-echo "${rep}: dir: ${c_dir} file: ${c_file} file_exe: ${c_exe}"]]></answer>
-    <validateonsave>1</validateonsave>
-    <testsplitterre></testsplitterre>
-    <language></language>
-    <acelang></acelang>
-    <sandbox></sandbox>
-    <grader></grader>
-    <cputimelimitsecs></cputimelimitsecs>
-    <memlimitmb></memlimitmb>
-    <sandboxparams></sandboxparams>
-    <templateparams></templateparams>
-    <hoisttemplateparams>1</hoisttemplateparams>
-    <extractcodefromjson>1</extractcodefromjson>
-    <templateparamslang>None</templateparamslang>
-    <templateparamsevalpertry>0</templateparamsevalpertry>
-    <templateparamsevald>{}</templateparamsevald>
-    <twigall>0</twigall>
-    <uiplugin></uiplugin>
-    <uiparameters></uiparameters>
-    <attachments>0</attachments>
-    <attachmentsrequired>0</attachmentsrequired>
-    <maxfilesize>10240</maxfilesize>
-    <filenamesregex></filenamesregex>
-    <filenamesexplain></filenamesexplain>
-    <displayfeedback>1</displayfeedback>
-    <giveupallowed>0</giveupallowed>
-    <prototypeextra></prototypeextra>
-    <testcases>
-      <testcase testtype="0" useasexample="1" hiderestiffail="0" mark="1.0000000" >
-      <testcode>
-                <text>./analyser</text>
-      </testcode>
-      <stdin>
-                <text></text>
-      </stdin>
-      <expected>
-                <text><![CDATA[Usage: ./analyser <rep>
-]]></text>
-      </expected>
-      <extra>
-                <text></text>
-      </extra>
-      <display>
-                <text>SHOW</text>
-      </display>
-    </testcase>
-      <testcase testtype="0" useasexample="1" hiderestiffail="0" mark="1.0000000" >
-      <testcode>
-                <text>./analyser</text>
-      </testcode>
-      <stdin>
-                <text>rep_exemple</text>
-      </stdin>
-      <expected>
-                <text>rep_exemple/fichier_exe est un fichier exécutable
+echo "${rep}: dir: ${c_dir} file: ${c_file} file_exe: ${c_exe}"
+#END CR_ANSWER
+
+#CR_CASE_CODE ./analyser
+#CR_CASE_STDIN 
+#CR_CASE_EXPECTED Usage: ./analyser <rep>
+#CR_CASE_MARK 1.0
+#CR_CASE_ASEXAMPLE 1
+#CR_CASE_DISPLAY SHOW
+
+#CR_CASE_CODE ./analyser
+#CR_CASE_STDIN rep_exemple
+#CR_CASE_EXPECTED_LONG
+rep_exemple/fichier_exe est un fichier exécutable
 rep_exemple/fichier_std1 est un fichier standard
 rep_exemple/fichier_std2 est un fichier standard
 rep_exemple/sous_rep1 est un sous-répertoire
 rep_exemple/sous_rep2 est un sous-répertoire
 rep_exemple: dir: 2 file: 2 file_exe: 1
-</text>
-      </expected>
-      <extra>
-                <text></text>
-      </extra>
-      <display>
-                <text>SHOW</text>
-      </display>
-    </testcase>
-      <testcase testtype="0" useasexample="0" hiderestiffail="0" mark="1.0000000" >
-      <testcode>
-                <text>./analyser</text>
-      </testcode>
-      <stdin>
-                <text>tmp</text>
-      </stdin>
-      <expected>
-                <text>tmp/f1 est un fichier standard
+#END CR_CASE_EXPECTED_LONG 
+#CR_CASE_MARK 1.0
+#CR_CASE_ASEXAMPLE 0
+#CR_CASE_DISPLAY SHOW
+
+#CR_CASE_CODE ./analyser
+#CR_CASE_STDIN tmp
+#CR_CASE_EXPECTED_LONG
+tmp/f1 est un fichier standard
 tmp/f2 est un fichier exécutable
 tmp/f3 est un fichier exécutable
 tmp/f4 est un fichier standard
@@ -210,16 +142,8 @@ tmp/r1 est un sous-répertoire
 tmp/r2 est un sous-répertoire
 tmp/r3 est un sous-répertoire
 tmp: dir: 3 file: 2 file_exe: 2
-</text>
-      </expected>
-      <extra>
-                <text></text>
-      </extra>
-      <display>
-                <text>HIDE</text>
-      </display>
-    </testcase>
-    </testcases>
-  </question>
-
-</quiz>
+#END CR_CASE_EXPECTED_LONG 
+#CR_CASE_MARK 1.0
+#CR_CASE_ASEXAMPLE 1
+#CR_CASE_DISPLAY HIDE 
+#TAGS qtex2xml exemple coderunner python template

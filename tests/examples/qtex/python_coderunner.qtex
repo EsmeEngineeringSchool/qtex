@@ -1,4 +1,5 @@
 #TYPE coderunner
+#CR_TYPE python3
 #NAME Exemple de question coderunner (python)
 #Q Dans une variable nommée \(z\), stocker un zéro de la fonction \(f\) ci-dessous, à l'aide de la librairie scipy.
 #GFBACK Merci d'avoir pris le temps de répondre à cette question.
@@ -12,12 +13,12 @@ def f(x):
     return x*x - 2 
 z = root(f,2)['x'][0]
 #END CR_ANSWER
-#CR_CASE_CODE
+#CR_CASE_CODE_LONG
 print("z" in dir())
 #END CR_CASE_CODE
-#CR_CASE_CODE
+#CR_CASE_CODE_LONG
 print(1.41421 <= z <= 1.41422)
-#END CR_CASE_CODE
+#END CR_CASE_CODE_LONG
 #CR_CASE_EXPECTED True
 #CR_CASE_EXPECTED True
 #CR_CASE_MARK 1.0

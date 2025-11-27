@@ -19,8 +19,7 @@
 #END EXTRA_CODE_Q_LONG
 #GFBACK Merci d'avoir pris le temps de répondre à cette question.
 #CR_TEMPLATE
-""" The template for a question type that compiles and runs a student-submitted^M
-    bash script.
+""" The template for a question type that compiles and runs a student-submitted bash script.
 """
 import subprocess, sys, os
 
@@ -94,14 +93,14 @@ for file in ${rep}/*
 do
         if [ -d ${file} ]
         then
-            echo "${file} est un sous-répertoire"
+            echo "${file} est un sous-repertoire"
             c_dir=$((c_dir+1))
         fi
         if [ -f ${file} ]
         then
             if [ -x ${file} ]
             then
-                echo "${file} est un fichier exécutable"
+                echo "${file} est un fichier executable"
                 c_exe=$((c_exe+1))
             else
                 echo "${file} est un fichier standard"

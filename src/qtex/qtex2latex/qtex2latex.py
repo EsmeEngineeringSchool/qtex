@@ -39,8 +39,13 @@ def lans(answ_text,grad,index,corrige=True):
         return out+f" {answ_text} "+"\\newline\hfill"
     return out
 # --------------------------------------------------------------------------
-def multichoice_to_latex(info,outfile,corrige=True):
+def write_question(info,outfile):
     outfile.write(macro("question",info["Q"])+newline())
+    if len(info["EXTRA_CODE_Q_LONG"]) :
+        outfile.write(info["EXTRA_CODE_Q_LONG"]+newline(""))
+# --------------------------------------------------------------------------
+def multichoice_to_latex(info,outfile,corrige=True):
+    write_question(info,outfile)
     answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD']))
     random.shuffle(answ)
     for k, (answ_txt,answ_grad) in enumerate(answ):
@@ -71,7 +76,7 @@ def tikz_relie(indices):
     return "\n".join([ f"{cmd('draw')}[very thick] (b{k+1}) -- (c{i+1});" for k,i in enumerate(indices)])
 # --------------------------------------------------------------------------
 def matching_to_latex(info,outfile,corrige=True):
-    outfile.write(macro("question",info["Q"]))
+    write_question(info,outfile)
     outfile.write(cmd('indent')+macro('resizebox','\linewidth')+'{!}{%'+newline(""))
     outfile.write(benv("tikzpicture"))
     maxwidth_sub_q, maxwidth_answ_text = (max(map(len,info['SUB_Q']))+8)*1.51323 , (max(map(len,info['ANSW_TEXT']))+8)*1.51323
@@ -86,8 +91,8 @@ def matching_to_latex(info,outfile,corrige=True):
     outfile.write(eenv("tikzpicture"))
     outfile.write('}')
 # --------------------------------------------------------------------------
-def coderunner_to_latex(info,outfile,numlines=18):
-    outfile.write(macro("question",info["Q"])+newline())
+def coderunner_to_latex(info,outfile,numlines=18,corrige=True):
+    write_question(info,outfile)
     outfile.write(benv("tikzpicture"))
     outfile.write(cmd('draw')+"[gray!40] (0,0) grid[step=0.5cm](16.5cm,"+f"{numlines*0.5}cm)"+";\n")
     outfile.write(cmd('draw')+"[ultra thick,inner sep=0] (0,0) rectangle (16.5cm,"+f"{numlines*0.5}cm)"+";\n")
@@ -96,10 +101,19 @@ def coderunner_to_latex(info,outfile,numlines=18):
     outfile.write(cmd('foreach')+' '+cmd('y')+'[count='+cmd('n')+'] in {'+f"{range_for}")
     outfile.write(cmd('node')+"[anchor=east, font=\\ttfamily\small,align=right] at (-0.1,"+cmd('y')+') {'+cmd('n')+"};\n")
     outfile.write("}\n")
+    match info["CR_TYPE"]:
+        case "python3" :
+            language='[style=colorPython]\n'
+        case "bash" :
+            language='[style=colorBash]\n'
+    if corrige :
+        code_displayed = info['CR_ANSWER']
+    else:
+        code_displayed = info['CR_PRELOAD']
     outfile.write(cmd('node')+"[anchor=north west, font=\\ttfamily\small,inner sep=0] at (0.1,"+f"{numline}cm"+"+0.5ex) {"+\
                   benv("minipage",options=True)+'{\linewidth}\n'+\
-                  benv("lstlisting",options=True)+'[style=colorPython,language=Python]\n'+\
-                  info['CR_PRELOAD']+\
+                  benv("lstlisting",options=True)+language+\
+                  code_displayed+\
                   eenv("lstlisting")+\
                   eenv("minipage")+"};\n")
     outfile.write(eenv("tikzpicture"))
@@ -113,7 +127,7 @@ def qtex_to_latex(info,outfile):
         case "coderunner":
             coderunner_to_latex(info,outfile,numlines=int(info['answerboxlines']))
         case _:
-            print(f"{info['TYPE']}->latex not possible")
+            print(f"{info['TYPE']}$\\rightarrow$latex not possible")
 #--------------------------------------------------------------------------------------------------
 # main parsing function
 def parsing():
@@ -145,6 +159,7 @@ def html_to_tex(info):
     filters+=[lambda t : re.sub(r"\$", r"\\$", t)]
     filters+=[lambda t : re.sub(r"&dollar;", r"\\\$", t)]
     for key in info :
+        if key in ["CR_PRELOAD","CR_ANSWER"] : continue 
         for f in filters:
             if info[key] is not None :
     #            print(key,info[key])

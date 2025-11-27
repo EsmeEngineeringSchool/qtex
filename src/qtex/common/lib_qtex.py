@@ -23,6 +23,7 @@ def default_values_before(data):
     info={}
     qtype=get("TYPE",data)
     info["Q_IMG"]=""
+    info["EXTRA_CODE_Q_LONG"]=""
 
     if qtype in types_with_requirements:  
         assert any([grep(cle,data) for cle in same_number[qtype]]),\

@@ -10,6 +10,7 @@ entrees={'TYPE'                    :{'long':False,'translation':False,'multiple'
          'NAME'                    :{'long':False,'translation':True ,'multiple':False},
          'Q'                       :{'long':False,'translation':True ,'multiple':False},
          'Q_LONG'                  :{'long':True ,'translation':True ,'multiple':False},
+         'EXTRA_CODE_Q_LONG'       :{'long':True ,'translation':True ,'multiple':False},
          'Q_IMG'                   :{'long':False,'translation':False,'multiple':False},
          'GFBACK_LONG'             :{'long':True ,'translation':True ,'multiple':False},
          'GFBACK'                  :{'long':False,'translation':True ,'multiple':False},
@@ -47,7 +48,7 @@ entrees={'TYPE'                    :{'long':False,'translation':False,'multiple'
 
 # entrees par type 
 globalinfo           = ['TYPE','NAME']
-questioninfo         = [('Q','Q_LONG'),('GFBACK','GFBACK_LONG'),'TAGS','Q_IMG']
+questioninfo         = [('Q','Q_LONG'),('GFBACK','GFBACK_LONG'),'TAGS','Q_IMG','EXTRA_CODE_Q_LONG']
 multichoiceinfo      = ['CFBACK','PFBACK','IFBACK','ANSW_FBACK','ANSW_GRAD',('ANSW_TEXT','ANSW_TEXT_LONG'),'ANSW_IMG']
 numericalinfo        = ['ANSW_FBACK','ANSW_GRAD','ANSW_TEXT']
 coderunnerinfo       = ['CR_TYPE',\

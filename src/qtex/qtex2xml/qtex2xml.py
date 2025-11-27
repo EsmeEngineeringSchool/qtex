@@ -151,10 +151,10 @@ def xml_category_globalinfo(info,outfile,indent):
 def xml_globalinfo(info,outfile,indent):
     outfile.write(tab(indent)+octextxml("name",text=info["NAME"]))
     if info["Q_IMG"] == "" :
-        outfile.write(tab(indent)+octextcdataxml("questiontext",("format","html"),cdata=info["Q"]+info["EXTRA_CODE_Q_LONG"],indent=indent))
+        outfile.write(tab(indent)+octextcdataxml("questiontext",("format","html"),cdata=info["Q"]+info["EXTRA_Q_LONG"],indent=indent))
     else:
         outfile.write(tab(indent)+\
-        octextcdataimagebase64xml("questiontext",("format","html"),cdata=info["Q"]+info["EXTRA_CODE_Q_LONG"],path_img=info["PATH"]+info["Q_IMG"],indent=indent))
+        octextcdataimagebase64xml("questiontext",("format","html"),cdata=info["Q"]+info["EXTRA_Q_LONG"],path_img=info["PATH"]+info["Q_IMG"],indent=indent))
 
     outfile.write(tab(indent)+octextcdataxml("generalfeedback",("format","html"),cdata=info["GFBACK"]))
     outfile.write(tab(indent)+ocxml("defaultgrade",valeur="1.0000000"))

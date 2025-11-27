@@ -1,4 +1,6 @@
-#Q Associer la commande d'extraction de sous-chaine avec son résultat lorsque <tt>chaine="vlhburdfs"</tt>.
+#Q_LONG
+Associer la commande d'extraction de sous-chaine avec son résultat lorsque <tt>chaine="vlhburdfs"</tt>.
+#END Q_LONG
 #SUB_Q <tt>echo ${chaine:6:2}</tt>
 #SUB_Q <tt>echo ${chaine:0:4}</tt>
 #SUB_Q <tt>echo ${chaine:7:2}</tt>

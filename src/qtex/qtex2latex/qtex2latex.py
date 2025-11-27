@@ -118,14 +118,14 @@ def coderunner_to_latex(info,outfile,numlines=18,corrige=True):
                   eenv("minipage")+"};\n")
     outfile.write(eenv("tikzpicture"))
 # --------------------------------------------------------------------------
-def qtex_to_latex(info,outfile):
+def qtex_to_latex(info,outfile,corrige):
     match info["TYPE"]:
         case "multichoice":
-            multichoice_to_latex(info,outfile)
+            multichoice_to_latex(info,outfile,corrige=corrige)
         case "matching":
-            matching_to_latex(info,outfile)
+            matching_to_latex(info,outfile,corrige=corrige)
         case "coderunner":
-            coderunner_to_latex(info,outfile,numlines=int(info['answerboxlines']))
+            coderunner_to_latex(info,outfile,numlines=int(info['answerboxlines']),corrige=corrige)
         case _:
             print(f"{info['TYPE']}$\\rightarrow$latex not possible")
 #--------------------------------------------------------------------------------------------------
@@ -138,6 +138,8 @@ def parsing():
                         default=sys.stdin,help='input files (on single or a set)',required=True)
     parser.add_argument('-o','--output', nargs='?', type=argparse.FileType('a'),
                         default=sys.stdout, help='output file or stdout')
+    parser.add_argument('-c','--corrige',   action='store_true', default=False, 
+                         help='générer la version corrigée de la question')
     args = parser.parse_args()
 
     output=args.output
@@ -147,7 +149,7 @@ def parsing():
 
     path=os.path.dirname(args.input[0].name)+'/'
     filespath=args.input
-    return path,filespath,output
+    return path,filespath,output,args.corrige
 #--------------------------------------------------------------------------------------------------
 def html_to_tex(info):
     filters=[]
@@ -170,12 +172,12 @@ def html_to_tex(info):
                     info[key]=f(info[key])
 #--------------------------------------------------------------------------------------------------
 def main():
-    path,filespath,outfile=parsing()
+    path,filespath,outfile,corrige=parsing()
     for file in filespath :
         if file.name[-13:]=="category.qtex" : continue
         print(file.name,file=sys.stderr,end=' ')
         info=readqtex(path,file)
         html_to_tex(info)
         print(f"\n\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
-        qtex_to_latex(info,outfile)
+        qtex_to_latex(info,outfile,corrige)
 

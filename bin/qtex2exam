@@ -234,7 +234,7 @@ do
     for QUES in ${RANDOM_QTEX}
     do
         printf "\rtraitement des questions : %2.0f %% " $(echo "($kques/$nb_qtex)*100" | bc -l)
-        if [ $TEXAM == "corrige" ]
+        if [ $TEXAM == "CORRIGE" ]
         then
             qtex2latex --corrige -i $QUES >> ${!TEX_OUTPUT} 
         else
@@ -260,6 +260,7 @@ do
         done
         echo
     done 
+    mupdf -r 216 ${!PDF_OUTPUT} #2> /dev/null & 
     mv ${!PDF_OUTPUT} $QTEX_TESTS/$(basename ${!PDF_OUTPUT})
     printf "génération du document : $QTEX_TESTS/$(basename ${!PDF_OUTPUT})\n"
     echo

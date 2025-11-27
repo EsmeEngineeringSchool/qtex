@@ -23,7 +23,7 @@ def default_values_before(data):
     info={}
     qtype=get("TYPE",data)
     info["Q_IMG"]=""
-    info["EXTRA_CODE_Q_LONG"]=""
+    info["EXTRA_Q_LONG"]=""
 
     if qtype in types_with_requirements:  
         assert any([grep(cle,data) for cle in same_number[qtype]]),\
@@ -55,7 +55,7 @@ def default_values_before(data):
             if not grep("CR_CASE_DISPLAY",data)          : info["CR_CASE_DISPLAY"] = ["SHOW"]*m
             if not grep("CR_CASE_STDIN",data)            : info["CR_CASE_STDIN"] = [""]*m
             if not grep("CR_CASE_EXTRA",data)            : info["CR_CASE_EXTRA"] = [""]*m
-            info["answerboxlines"]=str(int((get("CR_ANSWER",data).count("\n")+1)*1.25))
+            info["answerboxlines"]=str(int((get("CR_ANSWER",data).count("\n")+1)*1.2))
     return info
 
 def check_values_after(info):

@@ -11,23 +11,33 @@
 \usepackage{ifthen}
 \usepackage{listings}
 \lstset{
-    basicstyle=\linespread{1.25}\ttfamily\small,
-    lineskip=0.84ex,
+    basicstyle=\ttfamily\large,
+    lineskip=0.05ex,
     tabsize=4,
     columns=fullflexible,
     keepspaces=true,
 }
 \lstdefinestyle{colorPython}{
     language=Python,
-    basicstyle=\ttfamily\small,
-    keywordstyle=\color{blue}\bfseries,
-    commentstyle=\color{green!60!black}\itshape,
-    stringstyle=\color{orange},
-    numberstyle=\tiny\color{gray},
+    keywordstyle=\color{blue!70!black}\bfseries,
+    commentstyle=\color{green!40!black}\itshape,
+    stringstyle=\color{orange!80!black},
     identifierstyle=\color{black},
-    emphstyle=\color{red},
+    emphstyle=\color{red!70!black}\bfseries,
     showstringspaces=false,
-    breaklines=true
+    breaklines=true,
+    rulecolor=\color{blue!20}
+}
+\lstdefinestyle{colorBash}{
+    language=bash,
+    keywordstyle=\color{cyan!60!black}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{yellow!70!black},
+    identifierstyle=\color{black},
+    emphstyle=\color{red!80!black}\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    rulecolor=\color{green!30}
 }
 \usepackage[dvipsnames]{xcolor}
 \usepackage{tikz}

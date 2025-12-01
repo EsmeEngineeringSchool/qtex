@@ -6,9 +6,8 @@
   fichiers standard, de sous-répertoires, et d'exécutables d'un répertoire
   quelconque qui sera donné en paramètre.</p>
 #END Q_LONG 
-#EXTRA_CODE_Q_LONG
-<p>Le répertoire ci-dessous sera utilisé pour tester votre
-  script :</p>
+#EXTRA_Q_LONG
+<p>Le répertoire ci-dessous sera utilisé pour tester votre script :</p>
 <pre>rep_exemple/
     fichier_std1 (fichier standard)
     fichier_std2 (fichier standard)
@@ -16,11 +15,10 @@
     sous_rep1/   (sous répertoire)
     sous_rep2/   (sous répertoire)
 </pre>
-#END EXTRA_CODE_Q_LONG
+#END EXTRA_Q_LONG
 #GFBACK Merci d'avoir pris le temps de répondre à cette question.
 #CR_TEMPLATE
-""" The template for a question type that compiles and runs a student-submitted^M
-    bash script.
+""" The template for a question type that compiles and runs a student-submitted bash script.
 """
 import subprocess, sys, os
 
@@ -94,14 +92,14 @@ for file in ${rep}/*
 do
         if [ -d ${file} ]
         then
-            echo "${file} est un sous-répertoire"
+            echo "${file} est un sous-repertoire"
             c_dir=$((c_dir+1))
         fi
         if [ -f ${file} ]
         then
             if [ -x ${file} ]
             then
-                echo "${file} est un fichier exécutable"
+                echo "${file} est un fichier executable"
                 c_exe=$((c_exe+1))
             else
                 echo "${file} est un fichier standard"

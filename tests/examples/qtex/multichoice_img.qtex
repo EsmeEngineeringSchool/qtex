@@ -4,7 +4,9 @@
 #CFBACK Bravo! Votre réponse est correcte.
 #PFBACK Votre réponse est partiellement correcte.
 #IFBACK Votre réponse est incorrecte.
-#Q Cocher le champ de vecteurs correspondant à l'équation différentielle \(y'(t)=y(t)\)
+#Q_LONG
+Cocher le champ de vecteurs correspondant à l'équation différentielle \(y'(t)=y(t)\)
+#END Q_LONG
 #ANSW_GRAD 100
 #ANSW_GRAD 0
 #ANSW_GRAD 0

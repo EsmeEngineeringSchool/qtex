@@ -1,0 +1,268 @@
+#!/bin/bash
+# ------------------------------------------------------------------------------
+# Génération d'un examen LaTeX du type quiz à partir d'une base de données 
+# de questions au format qtex
+# ------------------------------------------------------------------------------
+# Version     : v0.1
+# Date        : Novembre 2025
+# Auteur      : fmv
+# -------------
+# description : qtex2exam génère deux documents pdf (corrigé et énoncé).
+# Le fonctionnement globale est décrit par le diagramme suivant :
+# 
+#       *.qtex => tex => pdf
+#
+# Le format *.qtex des questions est associé au format des questions Moodle. 
+# NOTE : basé sur genExamLaTeX du module unix qui utilisait un format de 
+# questions plus simple
+# ------------------------------------------------------------------------------
+# quelques constantes
+version="v0.1"
+author="fmv"
+now=$(date) 
+# quelques fonctions
+credits()
+{
+    echo "------------------------------------------------------------------------------"
+    echo "qtex2exam (Génération d'Examen LaTeX)"
+    echo "------------------------------------------------------------------------------"
+    echo "Date        : " ${now}
+    echo "Version     : " ${version}
+    echo "Auteur      : " ${author}
+    echo -e "Description : qtex2exam génère deux documents pdf (énoncé et corrigé)
+              à partir d'une liste de questions."
+    echo "------------------------------------------------------------------------------"
+}
+usage()
+{
+    echo -e "${RED}Usage :${NC} $0 OPTIONS "
+    echo "------------------------------------------------------------------------------"
+    echo -e "-h/--help            : cette aide"
+    echo -e "-q/--qtex   [rep]    : répertoire des questions de l'examen"
+    echo -e "-o/--order  [file]   : fichier donnant l'ordre des questions (default random)"
+    echo -e "-e/--examen [examen] : nom de l'examen (default = Examen final)"
+    echo -e "-m/--module [module] : module de l'examen (default = UNIX)"
+    echo -e "-p/--promo  [promo]  : promotion (default = INGE1)"
+    echo -e "-t/--titre  [titre]  : titre de l'évaluation (default = Title)"
+    echo -e "-a/--annee  [annee]  : année scolaire (default = 2022-2023)"
+    echo -e "-d/--date   [date]   : date de l'examen (default = None)"
+    exit 1
+}
+parameters()
+{
+    echo "Paramètres          : "
+    echo "------------------------------------------------------------------------------"
+    if [ -n "${orderFile}" ]
+    then
+        echo "l'ordre des questions est donné par ${orderFile}"
+    else
+        echo "l'ordre des questions est 'random'"
+    fi
+    echo "examen              : ${examen} (${examenOut})"
+    echo "titre               : ${titre}"
+    echo "module              : ${module}"
+    echo "promo               : ${promo}"
+    echo "année               : ${annee}"
+    echo "date de l'examen    : ${dateEx}"
+    echo "fichier en sortie   : ${OUTPUT}"
+    echo
+    echo "------------------------------------------------------------------------------"
+    echo "Répertoires nécessaire    : "
+    echo "------------------------------------------------------------------------------"
+    echo "banque de questions       : $(basename ${qtex})"
+    echo "repertoire de compilation : $(basename ${BUILD})"
+    echo "principaux templates      : $(basename ${TEMPLATE_ROOT})"
+    echo "------------------------------------------------------------------------------"
+    echo
+}
+# -------------------------------------------------------------------
+#  working directories
+# -------------------------------------------------------------------
+QTEX_ROOT="/home/filipe/dev/qtex"
+QTEX_SRC="$QTEX_ROOT/src"
+QTEX_TESTS="$QTEX_ROOT/tests"
+QTEX_QTEX2LATEX_ROOT="$QTEX_SRC/qtex/qtex2latex/"
+TEMPLATE_ROOT="$QTEX_QTEX2LATEX_ROOT/templates/"
+BUILD="$QTEX_TESTS/build"
+
+TEMPLATE_EXAMEN=$TEMPLATE_ROOT/template_examen.tex
+TEMPLATE_FILTRE_ENONCE=$BUILD/template_filtre_enonce.tex
+TEMPLATE_FILTRE_CORRIGE=$BUILD/template_filtre_corrige.tex
+
+if [ ! -d ${BUILD} ]     || \
+   [ ! -d ${TEMPLATES} ] 
+then
+    printf "${RED}WARNING${NC}\n"
+    printf "Vous devriez avoir quelques répertoires de travail : \n"
+    printf "    - '$BUILD'     : entrée/sortie de la plupart des scripts (nettoyer au début)\n"
+    printf "    - '$TEMPLATES' : répertoire des principaux template LaTeX\n"
+    exit 1
+fi
+# -------------------------------------------------------------------
+# option parser 
+# valeurs par défaut
+corrige=false
+while [ $# -gt 0 ]
+do
+    opt=$1
+    case $opt in 
+        -h|--help)
+            usage
+            exit 1
+            break;;
+        -m|--module) 
+            module=$2
+            shift;;
+        -c|--corrige) 
+            corrige=true
+            ;;
+        -e|--examen) 
+            examen=$2
+            shift;;
+        -p|--promo) 
+            promo=$2
+            shift;;
+        -t|--titre) 
+            titre=$2
+            shift;;
+        -q|--qtex) 
+            qtex=$2
+            shift;;
+        -d|--date) 
+            dateEx=$2
+            shift;;
+        -l|--lang) 
+            lang=$2
+            shift;;
+        -o|--order) 
+            orderFile=$2
+            shift;;
+        -a|--annee) 
+            annee=$2
+            shift;;
+    esac
+    shift
+done
+[ -z "${examen}"  ] && echo "ERR: examen manquant" && usage && exit 1
+[ -z "${module}"  ] && echo "ERR: module manquant" && usage && exit 1
+[ -z "${titre}"   ] && echo "ERR: titre manquant" && usage && exit 1
+[ -z "${promo}"   ] && echo "ERR: promo manquante" && usage && exit 1
+[ -z "${corrige}" ] && echo "ERR: corrige manquant" && usage && exit 1
+[ -z "${dateEx}"  ] && echo "ERR: date manquante" && usage && exit 1
+[ -z "${lang}"    ] && echo "ERR: lang manquant" && usage && exit 1
+[ -z "${annee}"   ] && echo "ERR: année manquante" && usage && exit 1
+[ -z "${qtex}"    ] && echo "ERR: dossier des questions manquant" && usage && exit 1 
+# ------------------------------------------------------------------------------
+# filtrer le template en fonction des paramètres 
+for corrige in true false
+do
+    if [ $corrige == "true" ] 
+    then
+        sed -e "s/__MODULE__/${module}/" \
+            -e "s/__DATE__/${dateEx}/" \
+            -e "s/__PROMO__/${promo}/" \
+            -e "s/__LANG__/${lang}/" \
+            -e "s/__CORRIGE__/${corrige}/" \
+            -e "s/__TITRE__/${titre}/" \
+            -e "s/__EXAMEN__/${examen}/" \
+            -e "s/__ANNEE__/${annee}/" $TEMPLATE_EXAMEN > $TEMPLATE_FILTRE_CORRIGE
+    else
+        sed -e "s/__MODULE__/${module}/" \
+            -e "s/__DATE__/${dateEx}/" \
+            -e "s/__PROMO__/${promo}/" \
+            -e "s/__LANG__/${lang}/" \
+            -e "s/__CORRIGE__/${corrige}/" \
+            -e "s/__TITRE__/${titre}/" \
+            -e "s/__EXAMEN__/${examen}/" \
+            -e "s/__ANNEE__/${annee}/" $TEMPLATE_EXAMEN > $TEMPLATE_FILTRE_ENONCE
+    fi
+done
+# ------------------------------------------------------------------------------
+examenOut="${examen,,}"
+examenOut="${examenOut// /_}" 
+# nom des fichiers en sortie
+OUTPUT=${module}_${promo}_${annee}_${examenOut}
+OUTPUT_CORRIGE=${module}_${promo}_${annee}_${examenOut}_corrige
+OUTPUT_ENONCE=${module}_${promo}_${annee}_${examenOut}_enonce
+#output files
+TEX_CORRIGE_OUTPUT=$BUILD/$OUTPUT_CORRIGE.tex
+TEX_ENONCE_OUTPUT=$BUILD/$OUTPUT_ENONCE.tex
+cat $TEMPLATE_FILTRE_CORRIGE > $TEX_CORRIGE_OUTPUT 
+cat $TEMPLATE_FILTRE_ENONCE > $TEX_ENONCE_OUTPUT 
+PDF_CORRIGE_OUTPUT=$BUILD/$OUTPUT_CORRIGE.pdf
+PDF_ENONCE_OUTPUT=$BUILD/$OUTPUT_ENONCE.pdf
+
+# afficher les credits
+credits
+# afficher les paramètres
+parameters
+
+# liste des questions dans un ordre aléatoire (on utilise 
+# le même ordre pour les deux documents générés)
+if [ -n "${orderFile}" ]
+then
+    tmp_qtex=$(cat ${orderFile})
+    for ques in ${tmp_qtex} 
+    do
+        echo $(realpath ${qtex}/${ques}) 
+    done > tmp_qtex
+    RANDOM_QTEX=$(cat tmp_qtex)
+    rm tmp_qtex
+else
+    # toutes les questions dans qtex
+    if [ -d $qtex ] 
+    then
+        qtex=${qtex%/}
+        RANDOM_QTEX=$(ls ${qtex}/*.qtex | shuf )
+        nb_qtex=$(ls -1 ${qtex}/*.qtex | wc -l)
+    elif [ -e $qtex ]
+    then
+        RANDOM_QTEX=${qtex}
+        nb_qtex=1
+    fi
+fi
+# ------------------------------------------------------------------------------
+# boucle sur les deux types de documents générés 
+for TEXAM in CORRIGE ENONCE 
+do
+    TEX_OUTPUT="TEX_${TEXAM}_OUTPUT"
+    PDF_OUTPUT="PDF_${TEXAM}_OUTPUT"
+    # initialisation de fichiers pour le résumé du corrigé.
+    # kques indice de la question (numéro dans le document tex final)
+    kques=1
+    # boucle sur les questions 
+    for QUES in ${RANDOM_QTEX}
+    do
+        printf "\rtraitement des questions : %2.0f %% " $(echo "($kques/$nb_qtex)*100" | bc -l)
+        if [ $TEXAM == "CORRIGE" ]
+        then
+            qtex2latex --corrige -i $QUES >> ${!TEX_OUTPUT} 
+        else
+            qtex2latex -i $QUES >> ${!TEX_OUTPUT}
+        fi
+        # next question 
+        kques=$((kques+1))
+    done
+    echo ""
+    # end document du tex principal ... on compile !
+    echo "\end{document}"         >> ${!TEX_OUTPUT} 
+
+    # 2 run pdflatex
+    for run in 1 2 
+    do
+        timer=0
+        pdflatex -output-directory=$BUILD ${!TEX_OUTPUT} > /dev/null &
+        while [ -d /proc/$! ]
+        do 
+            printf "\rpdflatex en cours (run ${run}) elapsed time : ${timer}s" 
+            timer=$((timer+1))
+            sleep 1
+        done
+        echo
+    done 
+    mupdf -r 216 ${!PDF_OUTPUT} #2> /dev/null & 
+    mv ${!PDF_OUTPUT} $QTEX_TESTS/$(basename ${!PDF_OUTPUT})
+    printf "génération du document : $QTEX_TESTS/$(basename ${!PDF_OUTPUT})\n"
+    echo
+    echo "------------------------------------------------------------------------------"
+done

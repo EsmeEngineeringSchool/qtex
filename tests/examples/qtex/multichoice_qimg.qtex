@@ -7,10 +7,12 @@
 #Q_LONG
 On se place dans le contexte du modèle proie-prédateur étudié en TD. 
 Qu'a-t-on fait pour passer de la figure gauche à la figure droite ?
+#END Q_LONG
+#EXTRA_Q_LONG
 <img src="@@PLUGINFILE@@/double_diagramme.png" alt="Double digramme. 
 L'un avec des stries rapprochées (à droite), l'autre avec des écarts plus faibles 
-(à gauche)" class="img-fluid atto_image_button_text-bottom" width="800" height="320"><br></p>
-#END Q_LONG
+(à gauche)" class="img-fluid atto_image_button_text-bottom" width="800" height="320">
+#END EXTRA_Q_LONG
 #Q_IMG assets/double_diagramme.png
 #ANSW_GRAD 100
 #ANSW_GRAD 0

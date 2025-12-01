@@ -1,14 +1,13 @@
-\documentclass[varwidth=true,border=20pt,a4paper]{standalone} %twocolumn
-\usepackage[french]{babel}
-%\usepackage[babel=false,kerning=true]{microtype}
+\documentclass[11pt,a4paper,twoside]{article} %twocolumn
+\usepackage[__LANG__]{babel}
+%\usepackage[babel=true,kerning=true]{microtype}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage[top=2cm,bottom=2.2cm,right=2.2cm,left=2.2cm]{geometry}
 \usepackage{graphicx}
 \usepackage{url}
-\usepackage{xargs}
-\usepackage{ifthen}
+\graphicspath{{./fig/}}
 \usepackage{listings}
 \lstset{
     basicstyle=\ttfamily\large,
@@ -40,39 +39,31 @@
     rulecolor=\color{green!30}
 }
 \usepackage[dvipsnames]{xcolor}
-\renewcommand\fbox{\fcolorbox{OliveGreen}{white}}
-\setlength{\fboxsep}{0pt}%
-\setlength{\fboxrule}{1pt}%
-\usepackage{tikz}
-\usetikzlibrary{calc}
-\usetikzlibrary{positioning}
-\usetikzlibrary{tikzmark}
-\usetikzlibrary{quotes,angles}
-\usetikzlibrary{arrows.meta,bending,automata,positioning}
-\usetikzlibrary{shapes}
-\usetikzlibrary{shapes.geometric}
-\usetikzlibrary{babel}
-\usetikzlibrary{decorations.text}
-\usetikzlibrary{matrix}
-\usetikzlibrary{fill.image}
-\usetikzlibrary{intersections}
-\graphicspath{{./fig/}}
 \usepackage{pifont}% http://ctan.org/pkg/pifont
 \newcommand{\cmark}{\ding{51}}%
 \newcommand{\xmark}{\ding{55}}%
 \newcommand\tr{\textquotesingle}
-\newboolean{editioncorrige} 
-\newcounter{numques}
-\setcounter{numques}{0}
-\newcommandx{\question}[2][1=]{%
-\addtocounter{numques}{1}
-\ifeditioncorrige
-\hfill\break\noindent{\normalfont#1\bfseries Q\thenumques.\xspace~#2\\[0.5ex]}
-\else
-\hfill\break\noindent{\normalfont#1\bfseries Q\thenumques.\xspace\normalfont\normalcolor~#2\\[0.5ex]}
-\fi
-}%
+\usepackage{examen}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Modifier les variables suivantes 
+\promo{__PROMO__}          % ex. IngéSUP, IngéSPE, Ingé1
+\module{__MODULE__}        % ex. Systèmes Techniques, Mathématiques Fondamentales
+\annee{__DATE__}           % ex. 2022-2023
+\epreuve{__EXAMEN__}       % ex. MidTerm, FinalExam, Rattrapage
+\titreEval{__TITRE__}      % ex. Dynamique et Déformation
+\dureeEval{2}              % ex. 2 (en nombre d'heures)
+\esme{true}                % examen ESME true or false
+\grille{true}             % document réponse true or false
+\corrige{__CORRIGE__}      % produire le corrigé
+\documentautorise{false}   % documents autorisés 
+\moyencalcul{false}        % moyen de calcul autorisés
+\dispositions{false}       % dispositions en cas d'erreur rencontrée 
+\malus{true}   
+\moodle{true}   
+\qcm{true}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+\maketitle
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\thispagestyle{fancy}

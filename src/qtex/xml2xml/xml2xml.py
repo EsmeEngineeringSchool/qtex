@@ -61,7 +61,7 @@ def translate_text_google_cloud(target: str, text: str) -> dict:
     result = translate_client.translate(text, target_language=target,format_ ="html")
     return html.unescape(result["translatedText"])
 #--------------------------------------------------------------------------------------------------
-def translate_xml(file,target,outpath,engine,tags_config):
+def translate_xml(file,target,outpath,engine,tags_config,parser):
     tags_a_traduire={}
     string_translated_once={}
     for qtype in tags_a_traduire_par_type.keys() :
@@ -160,4 +160,4 @@ def main():
     tags_from_config_file=load_tag_config(f)
     parser = etree.XMLParser(strip_cdata=False, remove_comments=False)
     for file in args.input :
-        translate_xml(file,target=args.target,outpath=args.outpath,engine=args.engine,tags_config=tags_from_config_file)
+        translate_xml(file,target=args.target,outpath=args.outpath,engine=args.engine,tags_config=tags_from_config_file,parser=parser)

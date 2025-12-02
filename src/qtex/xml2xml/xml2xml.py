@@ -37,6 +37,19 @@ def translate_text(target,text,engine):
             return translate_text_google_cloud(target,text)
         case "libretranslate" : 
             return translate_text_libretranslate(target,text)
+        case "google_trans" :
+            return translate_text_google_trans(target,text)
+#--------------------------------------------------------------------------------------------------
+# google trans free
+def translate_text_google_trans(target, text):
+    import asyncio
+    from googletrans import Translator
+
+    async def TranslateText():
+        async with Translator() as translator:
+            result = await translator.translate(text, dest=target)
+        return result.text
+    return asyncio.run(TranslateText())
 #--------------------------------------------------------------------------------------------------
 # requete en local avec translate
 def translate_text_libretranslate(target,text,url="http://localhost:5000/translate"):
@@ -136,7 +149,7 @@ def dir_path(path):
 #--------------------------------------------------------------------------------------------------
 def parsing_command_line():
     import os
-    ENGINES=["google_cloud","libretranslate"]
+    ENGINES=["google_trans","google_cloud","libretranslate"]
     formatter = lambda prog: argparse.HelpFormatter(prog,max_help_position=52)
     parser = argparse.ArgumentParser(formatter_class=formatter)
     parser.add_argument('-t','--target', nargs="?", default="en", help='langue cible de la traduction : en, pt, es')
@@ -144,7 +157,9 @@ def parsing_command_line():
                         default=sys.stdin,help='input files (on single or a set)',required=True)
     parser.add_argument('-o','--outpath', nargs='?', type=dir_path, default='./', help='output path')
     parser.add_argument('-c','--config', nargs='?', type=argparse.FileType('r'), help='configuration file')
-    parser.add_argument('-g','--google_cloud',   action='store_true', default=True, 
+    parser.add_argument('-gt','--google_trans', action='store_true', default=False, 
+                         help='utiliser l\'api translate de google')
+    parser.add_argument('-g','--google_cloud',   action='store_true', default=False, 
                          help='utiliser l\'api translate de google-cloud')
     parser.add_argument('-l','--libretranslate', action='store_true', default=False,
                          help='utiliser l\'api de libretranslate')
@@ -159,5 +174,6 @@ def main():
     f=args.config
     tags_from_config_file=load_tag_config(f)
     parser = etree.XMLParser(strip_cdata=False, remove_comments=False)
+    print(f"translate engine {args.engine}")
     for file in args.input :
         translate_xml(file,target=args.target,outpath=args.outpath,engine=args.engine,tags_config=tags_from_config_file,parser=parser)

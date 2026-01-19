@@ -73,6 +73,7 @@ matchinginfo         = ['CFBACK','PFBACK','IFBACK',('ANSW_TEXT','ANSW_TEXT_LONG'
 
 
 infos={"global"           : globalinfo ,  \
+       "description"      : questioninfo, \
        "question"         : questioninfo, \
        "multichoice"      : multichoiceinfo,\
        "numerical"        : numericalinfo,\

@@ -22,7 +22,10 @@ partial_feedbacks=["//correctfeedback/text",
 with_cdata=["//questiontext/text","//answer/text"]
 
 # dictionnaire qui regroupe les tags par type
-tags_a_traduire_par_type={"coderunner"  : question_tags + general_feedback,
+tags_a_traduire_par_type={\
+                          "description" : question_tags + general_feedback,
+                          "essay"       : question_tags,
+                          "coderunner"  : question_tags + general_feedback,
                           "matching"    : question_tags + general_feedback + partial_feedbacks,
                           "multichoice" : question_tags + general_feedback + partial_feedbacks,
                           "shortanswer" : question_tags + general_feedback + partial_feedbacks,
@@ -147,11 +150,16 @@ def load_tag_config(configfile):
 def dir_path(path):
     return path if os.path.isdir(path) else argparse.ArgumentTypeError(f"readable_dir:{path} is not a valid path")
 #--------------------------------------------------------------------------------------------------
+class CustomFormatter(argparse.RawDescriptionHelpFormatter,argparse.HelpFormatter):
+    def __init__(self, prog):
+        super().__init__(prog, max_help_position=52)
 def parsing_command_line():
     import os
     ENGINES=["google_trans","google_cloud","libretranslate"]
-    formatter = lambda prog: argparse.HelpFormatter(prog,max_help_position=52)
-    parser = argparse.ArgumentParser(formatter_class=formatter)
+    parser = argparse.ArgumentParser(
+            description="xml2xml : Traduction automatique des fichiers XML Moodle\n"
+                        "en ciblant des balises spécifiques selon le type de question.", 
+                         formatter_class=CustomFormatter)
     parser.add_argument('-t','--target', nargs="?", default="en", help='langue cible de la traduction : en, pt, es')
     parser.add_argument('-i','--input', nargs='+', type=argparse.FileType('r'),
                         default=sys.stdin,help='input files (on single or a set)',required=True)

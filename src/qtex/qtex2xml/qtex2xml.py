@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import sys
 import os
-from qtex.common.format_qtex import infos, entrees, types_with_requirements, same_number
 from qtex.common.string_     import tab
 from qtex.common.conversion  import png_to_base64
 from qtex.common.lib_qtex    import quellecle, readqtex, default_values_before
@@ -420,7 +419,8 @@ def xml_question(info,outfile,indent=0):
 def parsing():
     import os 
     import argparse
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+            description="qtex2xml permet de transformer une qtex au format xml de Moodle")
     parser.add_argument('-i','--input', nargs='+', type=argparse.FileType('r'),
                         default=sys.stdin,help='input files (on single or a set)',required=True)
     parser.add_argument('-o','--output', nargs='?', type=argparse.FileType('a'),

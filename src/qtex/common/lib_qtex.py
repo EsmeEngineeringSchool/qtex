@@ -85,6 +85,7 @@ def readqtex(path,file):
     if info["TYPE"] == "category" : return info
     # lectures des entrées globales pour les questions de type différente de category
     for c in infos["question"]:
+        if info["TYPE"] == "description" and c == "TAGS" : continue
         cle=quellecle(c,data)
         if not grep(cle[1],data) : continue
         info[cle[0]]=get(cle[1],data) 

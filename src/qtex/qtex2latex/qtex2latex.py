@@ -59,6 +59,9 @@ def write_question(info,outfile):
     else:
         outfile.write(macro("question",info["Q"])+newline())
 # --------------------------------------------------------------------------
+def description_to_latex(info,outfile):
+    outfile.write(info["Q"]+newline(""))
+# --------------------------------------------------------------------------
 def multichoice_to_latex(info,outfile,corrige=True):
     write_question(info,outfile)
     answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD'],info['ANSW_IMG']))
@@ -140,6 +143,8 @@ def qtex_to_latex(info,outfile,corrige):
             matching_to_latex(info,outfile,corrige=corrige)
         case "coderunner":
             coderunner_to_latex(info,outfile,numlines=int(info['answerboxlines']),corrige=corrige)
+        case "description":
+            description_to_latex(info,outfile)
         case _:
             print("\n"f"le type {info['TYPE']} n'est pas disponible""\n",file=sys.stderr)
     outfile.write(cmd("clearpage")+"\n")

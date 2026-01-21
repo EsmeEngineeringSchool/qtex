@@ -404,8 +404,8 @@ def xml_question(info,outfile,indent=0):
         xml_stack_prt(info,outfile,indent+1)
         xml_stack_qtest(info,outfile,indent+1)
 
-    # END OF QUESTION (we finish with tags if not category )
-    if info["TYPE"] != "category" : 
+    # END OF QUESTION (we finish with tags if not category or description)
+    if info["TYPE"] not in ["category","description"] : 
         outfile.write((indent+1)*'\t'+oxml("tags")+'\n')
         for tag in info["TAGS"].split():
             outfile.write((indent+2)*'\t'+ocxml("tag",valeur=textxml(tag)))
@@ -448,7 +448,9 @@ def main() :
         if file.name[-13:]=="category.qtex" : continue
         print(file.name,file=sys.stderr,end=' ')
         info=readqtex(path,file)
-        print(f"\n\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
+        for printinfo in ['TYPE','NAME','TAGS']:
+            if printinfo in info :
+                print(f"\n\ttype : {info[printinfo]}",file=sys.stderr,end="")
         xml_question(info,outfile,1)
 
     xml_footerquiz(outfile=outfile)

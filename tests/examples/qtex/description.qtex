@@ -1,0 +1,6 @@
+#TYPE description
+#NAME Exemple de question description 
+#Q_LONG
+Exemple de question de description.
+#END Q_LONG
+#GFBACK Description

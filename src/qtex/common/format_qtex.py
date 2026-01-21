@@ -48,7 +48,8 @@ entrees={'TYPE'                    :{'long':False,'translation':False,'multiple'
 
 # entrees par type 
 globalinfo           = ['TYPE','NAME']
-questioninfo         = [('Q','Q_LONG'),('GFBACK','GFBACK_LONG'),'TAGS','Q_IMG','EXTRA_Q_LONG']
+questioninfo         = [('Q','Q_LONG'),('GFBACK','GFBACK_LONG'),'Q_IMG','EXTRA_Q_LONG']
+tagsinfo             = ['TAGS']
 multichoiceinfo      = ['CFBACK','PFBACK','IFBACK','ANSW_FBACK','ANSW_GRAD',('ANSW_TEXT','ANSW_TEXT_LONG'),'ANSW_IMG']
 numericalinfo        = ['ANSW_FBACK','ANSW_GRAD','ANSW_TEXT']
 coderunnerinfo       = ['CR_TYPE',\
@@ -75,14 +76,14 @@ matchinginfo         = ['CFBACK','PFBACK','IFBACK',('ANSW_TEXT','ANSW_TEXT_LONG'
 infos={"global"           : globalinfo ,  \
        "description"      : questioninfo, \
        "question"         : questioninfo, \
-       "multichoice"      : multichoiceinfo,\
-       "numerical"        : numericalinfo,\
-       "coderunner"       : coderunnerinfo,\
-       "stack"            : stackinfo, \
-       "multichoicewiris" : multichoicewirisinfo,\
-       "shortanswerwiris" : shortanswerwirisinfo,\
-       "matching"         : matchinginfo,
-       "shortanswer"      : multichoiceinfo
+       "multichoice"      : multichoiceinfo+tagsinfo,\
+       "numerical"        : numericalinfo+tagsinfo,\
+       "coderunner"       : coderunnerinfo+tagsinfo,\
+       "stack"            : stackinfo+tagsinfo, \
+       "multichoicewiris" : multichoicewirisinfo+tagsinfo,\
+       "shortanswerwiris" : shortanswerwirisinfo+tagsinfo,\
+       "matching"         : matchinginfo+tagsinfo,
+       "shortanswer"      : multichoiceinfo+tagsinfo
       }
 
 # entrées multiples exigées de même taille et au moins une doit être présente

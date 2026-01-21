@@ -44,6 +44,7 @@ usage()
     echo -e "-m/--module [module] : module de l'examen (default = UNIX)"
     echo -e "-p/--promo  [promo]  : promotion (default = INGE1)"
     echo -e "-t/--titre  [titre]  : titre de l'évaluation (default = Title)"
+    echo -e "-l/--lang   [lang]   : langue de l'examen"
     echo -e "-a/--annee  [annee]  : année scolaire (default = 2022-2023)"
     echo -e "-d/--date   [date]   : date de l'examen (default = None)"
     exit 1
@@ -156,30 +157,26 @@ done
 # filtrer le template en fonction des paramètres 
 for corrige in true false
 do
-    if [ $corrige == "true" ] 
-    then
-        sed -e "s/__MODULE__/${module}/" \
-            -e "s/__DATE__/${dateEx}/" \
-            -e "s/__PROMO__/${promo}/" \
-            -e "s/__LANG__/${lang}/" \
-            -e "s/__CORRIGE__/${corrige}/" \
-            -e "s/__TITRE__/${titre}/" \
-            -e "s/__EXAMEN__/${examen}/" \
-            -e "s/__ANNEE__/${annee}/" $TEMPLATE_EXAMEN > $TEMPLATE_FILTRE_CORRIGE
+    if [ "$corrige" = "true" ]; then
+        TMPOUT="$TEMPLATE_FILTRE_CORRIGE"
     else
-        sed -e "s/__MODULE__/${module}/" \
-            -e "s/__DATE__/${dateEx}/" \
-            -e "s/__PROMO__/${promo}/" \
-            -e "s/__LANG__/${lang}/" \
-            -e "s/__CORRIGE__/${corrige}/" \
-            -e "s/__TITRE__/${titre}/" \
-            -e "s/__EXAMEN__/${examen}/" \
-            -e "s/__ANNEE__/${annee}/" $TEMPLATE_EXAMEN > $TEMPLATE_FILTRE_ENONCE
+        TMPOUT="$TEMPLATE_FILTRE_ENONCE"
     fi
+    sed -e "s/__MODULE__/${module}/" \
+        -e "s/__DATE__/${dateEx}/" \
+        -e "s/__PROMO__/${promo}/" \
+        -e "s/__LANG__/${lang}/" \
+        -e "s/__CORRIGE__/${corrige}/" \
+        -e "s/__TITRE__/${titre}/" \
+        -e "s/__EXAMEN__/${examen}/" \
+        -e "s/__ANNEE__/${annee}/" $TEMPLATE_EXAMEN > $TMPOUT
 done
 # ------------------------------------------------------------------------------
 examenOut="${examen,,}"
 examenOut="${examenOut// /_}" 
+if [[ "$module" == *" "* ]]; then
+    echo "${module} ne devrait pas contenir d'espaces"
+fi
 # nom des fichiers en sortie
 OUTPUT=${module}_${promo}_${annee}_${examenOut}
 OUTPUT_CORRIGE=${module}_${promo}_${annee}_${examenOut}_corrige

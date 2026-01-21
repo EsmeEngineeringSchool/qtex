@@ -1,0 +1,16 @@
+#TYPE multichoice
+#NAME gnu_2_en
+#Q Who is the founder of the GNU project?
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#CFBACK Bravo! Votre réponse est correcte.
+#PFBACK Votre réponse est partiellement correcte.
+#IFBACK Votre réponse est incorrecte.
+#ANSW_GRAD 100.0
+#ANSW_GRAD 0.0
+#ANSW_GRAD 0.0
+#ANSW_GRAD 0.0
+#ANSW_TEXT Richard Stallman 
+#ANSW_TEXT Linus Torvald 
+#ANSW_TEXT Denis Ritchie 
+#ANSW_TEXT Ken Thompson 
+#TAGS #TAGS OS GNU histoireUnix histoireGNU histoireLinux cours01 AAS84

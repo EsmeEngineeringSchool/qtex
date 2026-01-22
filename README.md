@@ -13,13 +13,13 @@ D'autres scripts utiles:
                 fichier global prêt à être importé dans Moodle.
 - `qtex2exam` : utilise `qtex2latex` pour générer un examen LaTeX en utilisant le template examen 
                   du dépôt [templatesLaTex](https://github.com/EsmeEngineeringSchool/templatesLaTeX)
-- `tex_2qtex` : script de conversion du vieux format `tex_` vers qtex
+- `tex_2qtex` : script de conversion du vieux format `tex_`[^2] vers qtex
 
 ## TODO
 Les scripts de filtre du type `html2tex` et `tex2html` pourrait aller dans `qtex/common/`
 
 [^1]: Ce dépôt est le résultat de la fusion de trois précédents dépôts maintenant disparus de https://github.com/EsmeEngineeringSchool/ 
-[^2]: Ce format ne prenait en compte que deux types de questions multichoice (CM) et matching (A) 
+[^2]: Ce format ne prenait en compte que deux types de questions multichoice (CM) et matching (A). 
 ```
 #Q Who is the founder of the GNU project?
 #ANS CM

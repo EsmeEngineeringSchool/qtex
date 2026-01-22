@@ -1,0 +1,78 @@
+\documentclass[beamer,t,aspectratio=169,10pt,dvipsnames]{standalone}
+\usepackage[french]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage{xargs}
+\usepackage{xcolor}
+\usepackage{ifthen}
+\usepackage{listings}
+\usetheme[notitle]{esmeDL}
+\setbeamertemplate{background}{}
+\setbeamertemplate{footline}{}
+\lstset{
+    basicstyle=\ttfamily\large,
+    lineskip=0.05ex,
+    tabsize=4,
+    columns=fullflexible,
+    keepspaces=true,
+}
+\lstdefinestyle{colorPython}{
+    language=Python,
+    keywordstyle=\color{blue!70!black}\bfseries,
+    commentstyle=\color{green!40!black}\itshape,
+    stringstyle=\color{orange!80!black},
+    identifierstyle=\color{black},
+    emphstyle=\color{red!70!black}\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    rulecolor=\color{blue!20}
+}
+\lstdefinestyle{colorBash}{
+    language=bash,
+    keywordstyle=\color{cyan!60!black}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{yellow!70!black},
+    identifierstyle=\color{black},
+    emphstyle=\color{red!80!black}\bfseries,
+    showstringspaces=false,
+    breaklines=true,
+    rulecolor=\color{green!30}
+}
+%\usepackage[dvipsnames]{xcolor}
+%\renewcommand\fbox{\fcolorbox{OliveGreen}{white}}
+\setlength{\fboxsep}{0pt}%
+\setlength{\fboxrule}{1pt}%
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{positioning}
+\usetikzlibrary{tikzmark}
+\usetikzlibrary{quotes,angles}
+\usetikzlibrary{arrows.meta,bending,automata,positioning}
+\usetikzlibrary{shapes}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{babel}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{matrix}
+\usetikzlibrary{fill.image}
+\usetikzlibrary{intersections}
+\graphicspath{{./fig/}}
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand\tr{\textquotesingle}
+\newboolean{editioncorrige} 
+\newcounter{numques}
+\setcounter{numques}{0}
+\newcommandx{\question}[2][1=]{%
+\addtocounter{numques}{1}
+\ifeditioncorrige
+\hfill\break\noindent{\normalfont#1\bfseries Q\thenumques.\xspace~#2\\[0.5ex]}
+\else
+\hfill\break\noindent{\normalfont#1\bfseries Q\thenumques.\xspace\normalfont\normalcolor~#2\\[0.5ex]}
+\fi
+}%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

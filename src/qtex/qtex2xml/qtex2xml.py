@@ -445,7 +445,7 @@ def main() :
         info=readqtex(path,file)
     xml_question(info,outfile,1)
     for file in filespath :
-        if file.name[-13:]=="category.qtex" : continue
+        if file.name.endswith("category.qtex"): continue 
         print(file.name,file=sys.stderr,end=' ')
         info=readqtex(path,file)
         for printinfo in ['TYPE','NAME','TAGS']:

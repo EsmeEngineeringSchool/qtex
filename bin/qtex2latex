@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from qtex.qtex2latex.qtex2latex import main
+from qtex.qtex2latex.qtex2latex import main_qtex_to_latex as main
 
 if __name__ == "__main__":
     main()

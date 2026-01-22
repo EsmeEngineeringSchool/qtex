@@ -5,52 +5,92 @@ import argparse
 import re
 import random
 from qtex.common.lib_qtex import quellecle,readqtex,default_values_before 
-# --------------------------------------------------------------------------
+# -----------------------------------------------------------------
+# join lines d'une liste
+# -----------------------------------------------------------------
+def concatenate(lines): return "".join(lines)
+# -----------------------------------------------------------------
+# applique \n à un ensemble de chaines dans une liste
+# -----------------------------------------------------------------
+def newlines(lines): return "\n".join(lines)
+# -----------------------------------------------------------------
 def newline(size="0.2cm"):
     if len(size) :
         return f"\\\\[{size}]\n"
     else:
         return f"\n"
-# --------------------------------------------------------------------------
-def benv(name,options=False):
-    if not options :
-        return "\\begin{"f"{name}""}""\n"
+# -----------------------------------------------------------------
+# retourne \begin{env}[options]
+# -----------------------------------------------------------------
+def begin(env,options="",arguments=None):
+    out=["\\begin{"f"{env}""}"]
+    if len(options): out+=[f"[{options}]"]
+    if arguments is not None: out+=[f"{{{arguments}}}"]
+    return concatenate(out)
+# -----------------------------------------------------------------
+# retourne \end{env}
+# -----------------------------------------------------------------
+def end(env):
+    return "\\end{"f"{env}""}"
+# -----------------------------------------------------------------
+# \macro[options]{value} (if semicolon=False,braces=True) 
+# \macro[options] value;  (if semicolon=True,braces=False) 
+# -----------------------------------------------------------------
+def macro(name,value="",options=""):
+    out=[f"\\{name}"]
+    if len(options) : out+=["["f"{options}""]"]
+    if len(value)   : out+=[f"{{{value}}}"]
+    return concatenate(out)
+# ------------------------------------------------------------------------------
+# \draw[options] path ;
+def tikz_draw(path, options=""):
+    return f"{macro('draw',options=options)} {path};"
+# ------------------------------------------------------------------------------
+# \node[options] (name) at (pos) {content};
+def tikz_node(name, pos="",content="", options=""):
+    if len(pos) :
+        return f"{macro('node', options=options)} ({name}) at ({pos}) {{{content}}};"
     else:
-        return "\\begin{"f"{name}""}"
+        return f"{macro('node', options=options)} ({name}) {{{content}}};"
 # --------------------------------------------------------------------------
-def eenv(name):
-    return "\\end{"f"{name}""}""\n"
-# --------------------------------------------------------------------------
-def cmd(name):
-    return f"\\{name}"
-# --------------------------------------------------------------------------
-def macro(name,value):
-    return f"{cmd(name)}{'{'}{value}{'}'}"
-# --------------------------------------------------------------------------
-def lans(answ_text,answ_grad,answ_img,path,index,corrige=True):
-    out="\\indent\\textbf{"f"{chr(index+65)}.""}"
+# \indent \textbf{A.} {\color{BrickRed} <réponse_incorrecte> \large\xmark}\newline
+# \indent \textbf{B.} {\color{OliveGreen} <réponse_correcte< \large\cmark}\newline
+def ans_to_latex(answ_text,answ_grad,answ_img,path,index,corrige=True):
+    label=f"\\indent {macro('textbf',chr(index+65)+'.')}"
+    grad=float(answ_grad)
     # si il n'y a pas d'image dans la réponse
     if not len(answ_img) :
         if corrige :
-            if float(answ_grad) > 0. :
-                out+=" {\color{OliveGreen}" f" {answ_text} " " {\\large\\cmark}}\\newline"
-            else:
-                out+=" {\color{BrickRed}  " f" {answ_text} " " {\\large\\xmark}}\\newline"
-            return out
+            color = "OliveGreen" if grad > 0 else "BrickRed"
+            symbol = "\\large\\cmark" if grad > 0 else "\\large\\xmark"
+            return f"{label} {{\\color{{{color}}} {answ_text} {symbol}}}\\newline"
         else:
-            return out+f" {answ_text} "+"\\newline\hfill"
+            return f"{label} {answ_text}\\newline\\hfill"
     # s'il y a une image dans la réponse
+    filepath_img,w_img,h_img = answ_img.split(" ")
+    filepath_img = path+filepath_img
+    img_code = f"{macro('includegraphics')}[width=0.5\\linewidth]{{{filepath_img}}}"
+    if corrige and grad > 0. : 
+        img_code = f"{macro('fbox')}{{{img_code}}}"
+    return f"{label} {img_code}"
+# --------------------------------------------------------------------------
+def ans_to_frame(answ_text,answ_grad,answ_img,path,index,corrige=True):
+    grad = float(answ_grad)
+    if corrige :
+        color = "OliveGreen" if grad > 0 else "BrickRed"
+    symbol = "\\cmark" if grad > 0 else "\\xmark"
+    if answ_img:
+        # séparer nom fichier, largeur, hauteur
+        filepath_img, w_img, h_img = answ_img.split(" ")
+        filepath_img = path + filepath_img
+        content = f"\\includegraphics[width=0.5\\linewidth]{{{filepath_img}}}"
     else:
-        filepath_img,w_img,h_img = answ_img.split(" ")
-        filepath_img = path+filepath_img
-        if corrige : 
-            if float(answ_grad) > 0. :
-                out+='{'+f"{cmd('fbox')}"+"{"
-        out+=f"{cmd('includegraphics')}"+"[width=0.5\\linewidth]{"+f"{filepath_img}"+"}"
-        if corrige : 
-            if float(answ_grad) > 0. :
-                out+='}}'
-    return out
+        content = answ_text
+    if corrige :
+        correction = f"{{~{symbol}}}" 
+        return f"\\item \\color{{{color}}}{{{content}}}{correction}"
+    else:
+        return f"\\item {{{content}}}"
 # --------------------------------------------------------------------------
 def write_question(info,outfile):
     if len(info["EXTRA_Q_LONG"]) :
@@ -62,61 +102,106 @@ def write_question(info,outfile):
 def description_to_latex(info,outfile):
     outfile.write(info["Q"]+newline(""))
 # --------------------------------------------------------------------------
-def multichoice_to_latex(info,outfile,corrige=True):
+def multichoice_to_latex(info,outfile,corrige=True,shuffle=[0,1,2,4]):
     write_question(info,outfile)
     answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD'],info['ANSW_IMG']))
-    random.shuffle(answ)
+    #random.shuffle(answ)
+    answ=[answ[i] for i in shuffle]
     for k, (answ_txt,answ_grad,answ_img) in enumerate(answ):
-        outfile.write(lans(answ_txt,answ_grad,answ_img,info['PATH'],k,corrige=corrige)+newline(""))
-# --------------------------------------------------------------------------
-def tikz_matching(k,subq,answ_text,gw=80,dw=80):
-    if k == 0 :
-        return \
-        f"""
-        {cmd('node')}[text width={gw}mm,align=left] (a1) at (0,0) {"{"} {macro("textbf",chr(65+k)+'.')} {subq} {"}"};
-        {cmd('node')} (b1) at ($(a1.east)+(1,0)$) {{}};
-        {cmd('node')} (c1) at ($(b1.east)+(2,0)$) {{}};
-        {cmd('draw')}[thick,outer sep=8mm] (b1) circle(0.5ex);
-        {cmd('draw')}[thick,outer sep=8mm] (c1) circle(0.5ex);
-        {cmd('node')}[text width={dw}mm,align = right] (d1) at ($(c1.east)+(6,0)$) {"{"} {macro("textbf",str(k+1)+'.')} {answ_text} {"}"};"""
+        outfile.write(ans_to_latex(answ_txt,answ_grad,answ_img,info['PATH'],k,corrige=corrige)+newline(""))
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+#\begin{frame}
+#    \frametitle{Quiz}
+#    \begin{blockWooclap}[Cours03]
+#    \emph{<QUES>}
+#    \begin{itemize}
+#        \item \color<2->{BrickRed}{<reponse1_incorrecte>}\only<2->{~\xmark}
+#        \item \color<2->{BrickRed}{<reponse2_incorrecte>}\only<2->{~\xmark}
+#        \item \color<2->{OliveGreen}{<reponse3_correcte>}\only<2->{~\cmark}
+#        \item \color<2->{BrickRed}{<reponse4_incorrecte>}\only<2->{~\xmark}
+#    \end{itemize}
+#    \end{blockWooclap}
+#\end{frame}
+#%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+def multichoice_to_frame(info,outfile,**kwargs):
+    wooclap=kwargs.get("wooclap_name","")
+    corrige=kwargs.get("corrige",True)
+    shuffle=kwargs.get("shuffle",[0,1,2,3])
+    out=[begin("frame")]
+    if len(wooclap) :
+        out+=[begin("blockWooclap",options=wooclap)]
     else:
-        return \
-        f"""
-        {cmd('node')}[text width={gw}mm,below=0.75cm of a{k}.center,anchor=center,align=left] (a{k+1}) {"{"} {macro("textbf",chr(65+k)+'.')} {subq} {"}"};
-        {cmd('node')}[below=0.75cm of b{k}.center,anchor=center] (b{k+1}) {{}};
-        {cmd('node')}[below=0.75cm of c{k}.center,anchor=center] (c{k+1}) {{}};
-        {cmd('draw')}[thick,outer sep=8mm] (b{k+1}) circle(0.5ex);
-        {cmd('draw')}[thick,outer sep=8mm] (c{k+1}) circle(0.5ex);
-        {cmd('node')}[below=0.75cm of d{k}.center,anchor=center,text width={dw}mm,align = right] (d{k+1}) {"{"} {macro("textbf",str(k+1)+'.')} {answ_text} {"}"};"""
+        out+=[begin("blockQues")]
+    out+=[macro("emph",info["Q"])]
+    out+=[begin("itemize")]
+    answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD'],info['ANSW_IMG']))
+    #random.shuffle(answ)
+    answ=[answ[i] for i in shuffle]
+    for k, (answ_txt,answ_grad,answ_img) in enumerate(answ):
+        out+=[ans_to_frame(answ_txt,answ_grad,answ_img,info['PATH'],k,corrige=corrige)]
+    out+=[end("itemize")]
+    if len(wooclap) : 
+        out+=[end("blockWooclap")]
+    else:
+        out+=[end("blockQues")]
+    out+=[end("frame")]
+    outfile.write(newlines(out))
+    
+# --------------------------------------------------------------------------
+def tikz_matching(k, subq, answ_text, gw=80, dw=80):
+    if k == 0:
+        label_tmp=f"{macro('textbf', chr(65+k)+'.')} {subq}"
+        node_a = tikz_node(name="a1",pos="0,0",content=label_tmp,options=f"text width={gw}mm,align=left")
+        node_b = tikz_node(name="b1", pos="$(a1.east)+(1,0)$", content="")
+        node_c = tikz_node(name="c1", pos="$(b1.east)+(2,0)$", content="")
+        draw_b = tikz_draw("(b1) circle(0.5ex)", options="thick,outer sep=8mm")
+        draw_c = tikz_draw("(c1) circle(0.5ex)", options="thick,outer sep=8mm")
+        label_tmp = f"{macro('textbf', str(k+1)+'.')} {answ_text}"
+        node_d = tikz_node(name="d1",pos="$(c1.east)+(6,0)$",content=label_tmp,options=f"text width={dw}mm,align=right")
+    else:
+        # k > 0 : positions relatives aux nœuds précédents
+        label_tmp = f"{macro('textbf', chr(65+k)+'.')} {subq}"
+        node_a = tikz_node(name=f"a{k+1}",options=f"below=0.75cm of a{k}.center,anchor=center,text width={gw}mm,align=left",
+                           content=label_tmp)
+        node_b = tikz_node(name=f"b{k+1}",options=f"below=0.75cm of b{k}.center,anchor=center",content="")
+        node_c = tikz_node(name=f"c{k+1}",options=f"below=0.75cm of c{k}.center,anchor=center",content="")
+        draw_b = tikz_draw(f"(b{k+1}) circle(0.5ex)", options="thick,outer sep=8mm")
+        draw_c = tikz_draw(f"(c{k+1}) circle(0.5ex)", options="thick,outer sep=8mm")
+        label_tmp = f"{macro('textbf', str(k+1)+'.')} {answ_text}"
+        node_d = tikz_node(name=f"d{k+1}",options=f"below=0.75cm of d{k}.center,anchor=center,text width={dw}mm,align=right",
+                           content=label_tmp)
+    return newlines([node_a, node_b, node_c, draw_b, draw_c, node_d])
+
 # --------------------------------------------------------------------------
 def tikz_relie(indices):
     # relie toutes les sous questions à leurs réponses
-    return "\n".join([ f"{cmd('draw')}[very thick] (b{k+1}) -- (c{i+1});" for k,i in enumerate(indices)])
+    return "\n".join([ f"{macro('draw')}[very thick] (b{k+1}) -- (c{i+1});" for k,i in enumerate(indices)])
 # --------------------------------------------------------------------------
-def matching_to_latex(info,outfile,corrige=True):
+def matching_to_latex(info,outfile,corrige=True,shuffle=[0,1,2,3]):
     write_question(info,outfile)
-    outfile.write(cmd('indent')+macro('resizebox','\linewidth')+'{!}{%'+newline())
-    outfile.write(benv("tikzpicture"))
+    outfile.write(macro('indent')+macro('resizebox','\linewidth')+'{!}{%'+newline())
+    outfile.write(begin("tikzpicture"))
     maxwidth_sub_q, maxwidth_answ_text = (max(map(len,info['SUB_Q']))+8)*1.51323 , (max(map(len,info['ANSW_TEXT']))+8)*1.51323
     indices=[k for k in range(len(info['SUB_Q']))]
     shuff=list(zip(info['ANSW_TEXT'],indices))
-    random.shuffle(shuff)
+    #random.shuffle(shuff)
+    shuff=[shuff[i] for i in shuffle]
     shuff_answ_text,indices=zip(*shuff)
     for k,(subq,answ_text) in enumerate(zip(info['SUB_Q'],shuff_answ_text)) :
         outfile.write(tikz_matching(k,subq,answ_text,gw=maxwidth_sub_q,dw=maxwidth_answ_text))
     if corrige: outfile.write(tikz_relie(indices))
-    outfile.write(eenv("tikzpicture"))
+    outfile.write(end("tikzpicture"))
     outfile.write('}')
 # --------------------------------------------------------------------------
 def coderunner_to_latex(info,outfile,numlines=18,corrige=True):
     write_question(info,outfile)
-    outfile.write(benv("tikzpicture"))
-    outfile.write(cmd('draw')+"[gray!40] (0,0) grid[step=0.5cm](16.5cm,"+f"{numlines*0.5}cm)"+";\n")
-    outfile.write(cmd('draw')+"[ultra thick,inner sep=0] (0,0) rectangle (16.5cm,"+f"{numlines*0.5}cm)"+";\n")
+    outfile.write(begin("tikzpicture"))
+    outfile.write(macro('draw')+"[gray!40] (0,0) grid[step=0.5cm](16.5cm,"+f"{numlines*0.5}cm)"+";\n")
+    outfile.write(macro('draw')+"[ultra thick,inner sep=0] (0,0) rectangle (16.5cm,"+f"{numlines*0.5}cm)"+";\n")
     numline=numlines*0.5
     range_for=','.join([f"{numlines*0.5-k*0.5}" for k in range(1,3)])+',...,0.0} {\n'
-    outfile.write(cmd('foreach')+' '+cmd('y')+'[count='+cmd('n')+'] in {'+f"{range_for}")
-    outfile.write(cmd('node')+"[anchor=east, font=\\ttfamily\small,align=right] at (-0.1,"+cmd('y')+') {'+cmd('n')+"};\n")
+    outfile.write(macro('foreach')+' '+macro('y')+'[count='+macro('n')+'] in {'+f"{range_for}")
+    outfile.write(macro('node')+"[anchor=east, font=\\ttfamily\small,align=right] at (-0.1,"+macro('y')+') {'+macro('n')+"};\n")
     outfile.write("}\n")
     match info["CR_TYPE"]:
         case "python3" :
@@ -127,27 +212,46 @@ def coderunner_to_latex(info,outfile,numlines=18,corrige=True):
         code_displayed = info['CR_ANSWER']
     else:
         code_displayed = info['CR_PRELOAD']
-    outfile.write(cmd('node')+"[anchor=north west, font=\\ttfamily\small,inner sep=0] at (0.1,"+f"{numline}cm"+"+0.5ex) {"+\
-                  benv("minipage",options=True)+'{\linewidth}\n'+\
-                  benv("lstlisting",options=True)+language+\
+    outfile.write(macro('node')+"[anchor=north west, font=\\ttfamily\small,inner sep=0] at (0.1,"+f"{numline}cm"+"+0.5ex) {"+\
+                  begin("minipage",options=True)+'{\linewidth}\n'+\
+                  begin("lstlisting",options=True)+language+\
                   code_displayed+\
-                  eenv("lstlisting")+\
-                  eenv("minipage")+"};\n")
-    outfile.write(eenv("tikzpicture"))
+                  end("lstlisting")+\
+                  end("minipage")+"};\n")
+    outfile.write(end("tikzpicture"))
 # --------------------------------------------------------------------------
-def qtex_to_latex(info,outfile,corrige):
+def qtex_to_latex(info,outfile,corrige,shuffle):
     match info["TYPE"]:
         case "multichoice":
-            multichoice_to_latex(info,outfile,corrige=corrige)
+            multichoice_to_latex(info,outfile,corrige=corrige,shuffle=shuffle)
         case "matching":
-            matching_to_latex(info,outfile,corrige=corrige)
+            matching_to_latex(info,outfile,corrige=corrige,shuffle=shuffle)
         case "coderunner":
             coderunner_to_latex(info,outfile,numlines=int(info['answerboxlines']),corrige=corrige)
         case "description":
             description_to_latex(info,outfile)
         case _:
-            print("\n"f"le type {info['TYPE']} n'est pas disponible""\n",file=sys.stderr)
-    outfile.write(cmd("clearpage")+"\n")
+            print("\n"f"le type {info['TYPE']} n'est pas disponible au format LaTeX""\n",file=sys.stderr)
+    outfile.write(macro("clearpage")+"\n")
+# --------------------------------------------------------------------------
+def qtex_to_frame(info,outfile,corrige,shuffle):
+    match info["TYPE"]:
+        case "multichoice":
+            multichoice_to_frame(info,outfile,corrige=corrige,shuffle=shuffle)
+        case "matching":
+            matching_to_frame(info,outfile,corrige=corrige)
+        case _:
+            print("\n"f"le type {info['TYPE']} n'est pas disponible au format frame (Beamer/LaTeX)""\n",file=sys.stderr)
+#--------------------------------------------------------------------------------------------------
+def check_shuffle(value):
+    # convertir en int et vérifier la valeur
+    try:
+        ivalue = int(value)
+    except ValueError:
+        raise argparse.ArgumentTypeError(f"{value} n'est pas un entier")
+    if ivalue < 0 or ivalue > 3:
+        raise argparse.ArgumentTypeError(f"{value} doit être entre 0 et 3")
+    return ivalue
 #--------------------------------------------------------------------------------------------------
 # main parsing function
 def parsing():
@@ -158,6 +262,7 @@ def parsing():
                         default=sys.stdout, help='output file or stdout')
     parser.add_argument('-c','--corrige',   action='store_true', default=False, 
                          help='générer la version corrigée de la question')
+    parser.add_argument('-s','--shuffle',type=check_shuffle, nargs=4,metavar=('I1','I2','I3','I4'), help='Permutation des indices (4 entiers uniques entre 0 et 3)')
     args = parser.parse_args()
     output=args.output
     if output.name !="<stdout>":
@@ -165,7 +270,7 @@ def parsing():
         output.truncate()
     path=os.path.dirname(args.input[0].name)+'/'
     filespath=args.input
-    return path,filespath,output,args.corrige
+    return path,filespath,output,args.corrige,args.shuffle
 #--------------------------------------------------------------------------------------------------
 def html_to_tex(info):
     filters=[]
@@ -191,13 +296,27 @@ def html_to_tex(info):
                 else:
                     info[key]=f(info[key])
 #--------------------------------------------------------------------------------------------------
-def main():
-    path,filespath,outfile,corrige=parsing()
+def printinfodebug(file,info):
+    print(f"\n{64*'-'}",file=sys.stderr)
+    print(f"{file.name}",file=sys.stderr)
+    print(f"\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
+    print(f"{64*'-'}",file=sys.stderr)
+#--------------------------------------------------------------------------------------------------
+def main_qtex_to_latex():
+    path,filespath,outfile,corrige,shuffle=parsing()
     for file in filespath :
-        if file.name[-13:]=="category.qtex" : continue
-        print(file.name,file=sys.stderr)
+        if file.name.endswith("category.qtex"): continue
         info=readqtex(path,file)
         html_to_tex(info)
-        #print(f"\n\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
-        qtex_to_latex(info,outfile,corrige)
+        qtex_to_latex(info,outfile,corrige,shuffle)
+        printinfodebug(file,info)
+#--------------------------------------------------------------------------------------------------
+def main_qtex_to_frame():
+    path,filespath,outfile,corrige,shuffle=parsing()
+    for file in filespath :
+        if file.name.endswith("category.qtex"): continue
+        info=readqtex(path,file)
+        html_to_tex(info)
+        qtex_to_frame(info,outfile,corrige,shuffle)
+        printinfodebug(file,info)
 

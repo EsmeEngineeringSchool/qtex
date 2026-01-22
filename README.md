@@ -19,13 +19,4 @@ D'autres scripts utiles:
 Les scripts de filtre du type `html2tex` et `tex2html` pourrait aller dans `qtex/common/`
 
 [^1]: Ce dépôt est le résultat de la fusion de trois précédents dépôts maintenant disparus de https://github.com/EsmeEngineeringSchool/ 
-[^2]: Ce format ne prenait en compte que deux types de questions multichoice (CM) et matching (A). 
-```
-#Q Who is the founder of the GNU project?
-#ANS CM
-A. Richard Stallman \newline ✓
-B. Linus Torvald \newline
-C. Denis Ritchie \newline
-D. Ken Thompson \newline
-#TAGS #OS #GNU #histoireUnix #histoireGNU #histoireLinux #cours01 #AAS84
-```
+[^2]: Ce format ne prenait en compte que deux types de questions multichoice (CM) et matching (A). [(exemple de fichier tex_)](tests/exemples/tex_/gnu_2_en.tex_)

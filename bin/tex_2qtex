@@ -1,7 +1,22 @@
 #!/bin/bash
+usage()
+{
+    echo "Usage: $(basename $0) TEX_ [OUTDIR]"
+    echo "TEX_ : fichier tex_ à transformer au format qtex"
+    echo "OUTDIR : dossier de sortie"
+    exit 1
+}
 TEX_=$1
-basename=${TEX_%*.tex_}
-QTEX=${basename}.qtex
+[ $# -gt 2 ] || [ $# -eq 0 ] && usage
+OUTDIR=.
+if [ $# -eq 2 ]
+then
+    OUTDIR=$2
+fi
+[ ! -d $OUTDIR ] && mkdir $OUTDIR
+bse=$(basename $TEX_)
+name=${bse%*.tex_}
+QTEX=$OUTDIR/$name.qtex
 echo "$TEX_ -> $QTEX"
 answs=()
 correct=()
@@ -42,9 +57,9 @@ else
     score="0.0"
 fi
 
-# WRITINF QTEX
+# WRITING QTEX
 echo "#TYPE $qtype" > $QTEX
-echo "#NAME $basename" >> $QTEX
+echo "#NAME $name" >> $QTEX
 grep "#Q" $TEX_ >> $QTEX
 cat <<EOF >> $QTEX
 #GFBACK Merci d'avoir pris le temps de répondre à cette question.
@@ -64,4 +79,4 @@ done >> $QTEX
 for ans in "${answs[@]}"; do
     echo "#ANSW_TEXT $ans"
 done >> $QTEX
-echo "#TAGS ${tags}" >> $QTEX
+echo "${tags}" >> $QTEX

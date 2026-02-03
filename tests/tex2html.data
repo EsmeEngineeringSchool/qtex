@@ -1,0 +1,4 @@
+\$a=1\$
+\texttt{\$\{a:0:1\}}
+\texttt{echo \$a}
+\textbf{Hello}

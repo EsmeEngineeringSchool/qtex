@@ -14,11 +14,11 @@ def quellecle(cle,data):
         return (cle,cle)
     else :
         return tuple([cle[0]]+[cle[c] for c in which_index])
-
 #--------------------------------------------------------------------------------------------------
-# pour définir quelques valeurs par défaut (test si des clés exigées sont absentes, 
-# le prétexte étant de pouvoir compter le nombre d'éléments)
-# et retourne le dictionnaire info qui regroupe tous les paramètres lues dans le fichier qtex
+# pour définir quelques valeurs par défaut des clés :
+#  - test si des clés exigées sont absentes,
+#  - permet également de compter le nombre d'éléments
+#  - retourne le dictionnaire info qui regroupe tous les paramètres lus dans le fichier qtex
 def default_values_before(data):
     info={}
     qtype=get("TYPE",data)
@@ -57,7 +57,8 @@ def default_values_before(data):
             if not grep("CR_CASE_EXTRA",data)            : info["CR_CASE_EXTRA"] = [""]*m
             info["answerboxlines"]=str(int((get("CR_ANSWER",data).count("\n")+1)*1.2))
     return info
-
+#---------------------------------------------------------------------------------------------------
+# Vérifier quelques valeurs données à certaines clés
 def check_values_after(info):
     ALLOWED_CR_CASE_DISPLAY=["SHOW", "HIDE", "HIDE_IF_SUCCEED","HIDE_IF_FAIL"]
     match info["TYPE"] :
@@ -67,8 +68,8 @@ def check_values_after(info):
         case _ :
             return
 
-#--------------------------------------------------------------------------------------------------
-# Lecture des fichiers au format maison qtex
+#---------------------------------------------------------------------------------------------------
+# Lecture des fichiers au format qtex
 # retourne un dictionnaire des infos lues dans le fichier qtex
 def readqtex(path,file):
     data=file.read()
@@ -83,14 +84,15 @@ def readqtex(path,file):
         if not grep(cle[1],data) : continue
         info[cle[0]]=get(cle[1],data) 
     if info["TYPE"] == "category" : return info
-    # lectures des entrées globales pour les questions de type différente de category
+    # lectures des entrées globales pour les questions de types différents de "category"
     for c in infos["question"]:
         #if info["TYPE"] == "description" and c == "TAGS" : continue
         cle=quellecle(c,data)
         if not grep(cle[1],data) : continue
         info[cle[0]]=get(cle[1],data) 
+    # pour les questions autres que description
     if info["TYPE"] == "description" : return info
-    # les entrées en fonctions du type info["TYPE"]
+    # toutes les autres types de questions 
     for c in infos[info["TYPE"]] :
         cle=quellecle(c,data)
         for cc in cle[1:]:

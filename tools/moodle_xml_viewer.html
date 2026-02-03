@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Moodle XML – Question Viewer</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background: #f5f5f5;
+    }
+
+    .question {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      border-radius: 6px;
+    }
+
+    .q-title {
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .q-type {
+      font-size: 0.85em;
+      margin-bottom: 0.5rem;
+    }
+
+    .answers li.correct {
+      color: green;
+      font-weight: bold;
+    }
+
+    .answers li {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Viewer de questions Moodle (XML)</h1>
+
+  <!-- Sélecteur de fichier XML -->
+  <input type="file" id="fileInput" accept=".xml">
+  <div id="questions"></div>
+
+  <script>
+    const fileInput = document.getElementById("fileInput");
+    const questionsDiv = document.getElementById("questions");
+
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const xmlText = e.target.result;
+        parseMoodleXML(xmlText);
+      };
+
+      reader.readAsText(file);
+    });
+
+    function parseMoodleXML(xmlText) {
+      questionsDiv.innerHTML = "";
+
+      const parser = new DOMParser();
+      const xml = parser.parseFromString(xmlText, "text/xml");
+
+      const questions = xml.querySelectorAll("question");
+
+      questions.forEach(q => {
+        const type = q.getAttribute("type");
+
+        // on ignore les catégories pour l’instant
+        if (type === "category") return;
+
+        const title = q.querySelector("name > text")?.textContent ?? "(sans titre)";
+        const questionHTML = q.querySelector("questiontext > text")?.textContent ?? "";
+
+        const div = document.createElement("div");
+        div.className = "question";
+
+        div.innerHTML = `
+          <div class="q-title">Name : ${title}</div>
+          <div class="q-type">Type : ${type}</div>
+          <div class="q-text">${questionHTML}</div>
+        `;
+
+        // gestion très simple des QCM
+        if (type === "multichoice") {
+          const answers = q.querySelectorAll("answer");
+          const ul = document.createElement("ul");
+          ul.className = "answers";
+
+          answers.forEach(a => {
+            const li = document.createElement("li");
+            li.innerHTML = a.querySelector("text")?.textContent ?? "";
+
+            const fraction = a.getAttribute("fraction");
+            if (fraction && parseFloat(fraction) > 0) {
+              li.classList.add("correct");
+            }
+            ul.appendChild(li);
+          });
+
+          div.appendChild(ul);
+        }
+
+        questionsDiv.appendChild(div);
+      });
+    }
+  </script>
+
+</body>
+</html>

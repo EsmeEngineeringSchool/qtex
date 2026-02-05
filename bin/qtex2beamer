@@ -1,24 +1,11 @@
 #!/bin/bash
+set -euo pipefail
 usage()
 {
     echo "Usage: $0 [-c] -i <input_qtex_file>" 
     exit 1
 }
-if [ $# -eq 3 ]
-then
-    CORRIGE=$1
-    QTEX=$3
-    [ $CORRIGE != "-c" ] && usage
-    [ $2 != "-i" ] && usage
-elif [ $# -eq 2 ]
-then
-    CORRIGE=$1
-    QTEX=$2
-    [ $CORRIGE != "-c" ] && usage
-else
-    QTEX=$1
-fi
-[ -z "$QTEX" ] && [ ! -f "$QTEX" ] && usage
+#Quelques variables de chemin
 QTEX_ROOT="/home/filipe/dev/qtex/"
 QTEX_SRC="$QTEX_ROOT/src"
 QTEX_TESTS="$QTEX_ROOT/tests"
@@ -27,18 +14,32 @@ BUILD="$QTEX_TESTS/build"
 TEX_OUTPUT=${BUILD}/tmp_simple.tex
 PDF_OUTPUT=${BUILD}/tmp_simple.pdf
 LOG_OUTPUT=${BUILD}/pdflatex.log
-mkdir -p "$BUILD"
-[ ! -f "$TEMPLATE" ] && echo "LaTeX template not found" && exit 1
-cat ${TEMPLATE} > $TEX_OUTPUT
-shuff=$(shuf -i 0-3 | tr '\n' ' ')
-if [ -z $CORRIGE ] 
-then 
-    qtex2frame -i ${QTEX} -s ${shuff} >> $TEX_OUTPUT
-else
-    qtex2frame -i ${QTEX} -s ${shuff} >> $TEX_OUTPUT
-    qtex2frame --corrige -i ${QTEX} -s ${shuff} >> $TEX_OUTPUT
-fi
+# Options
+CORRIGE=false
+QTEX=""
+VIEW=true
+while getopts ":ci:" opt; do
+    case "$opt" in
+        c)  CORRIGE=true ;;
+        i)  QTEX="$OPTARG" ;;
+        n)  VIEW=false ;;
+        *)  usage ;;
+    esac
+done
+# Vérifications
+[ -z "$QTEX" ] && usage
+[ ! -f "$QTEX" ] && { echo "Erreur : fichier '$QTEX' introuvable"; exit 1; }
 
+mkdir -p "$BUILD"
+[ ! -f "$TEMPLATE" ] && { echo "Template LaTeX introuvable"; exit 1; }
+cp "$TEMPLATE" "$TEX_OUTPUT"
+SHUFFLE=$(shuf -i 0-3 | paste -sd' ')
+qtex2frame -i ${QTEX} -s ${SHUFFLE} >> $TEX_OUTPUT
+if $CORRIGE; then 
+    qtex2frame --corrige -i ${QTEX} -s ${SHUFFLE} >> $TEX_OUTPUT
+fi
 echo "\end{document}" >> $TEX_OUTPUT 
 pdflatex -output-directory $BUILD $TEX_OUTPUT > $LOG_OUTPUT 2>&1 
-mupdf -r 216 $PDF_OUTPUT 2> /dev/null & 
+if $VIEW; then
+    mupdf -r 216 $PDF_OUTPUT 2> /dev/null & 
+fi

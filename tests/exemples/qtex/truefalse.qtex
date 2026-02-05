@@ -1,0 +1,9 @@
+#TYPE truefalse 
+#NAME Exemple de question truefalse
+#GFBACK Merci d'avoir pris le temps de répondre à cette question.
+#Q_LONG
+Est-ce que <tt>bash</tt> est un intérpréteur de commandes ?
+#END Q_LONG
+#ANSW_GRAD 100
+#ANSW_TEXT true
+#TAGS qtex2xml exemple truefalse template 

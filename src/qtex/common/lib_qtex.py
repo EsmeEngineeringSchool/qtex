@@ -34,6 +34,11 @@ def default_values_before(data):
         m=1
 
     match qtype :
+        case "truefalse" :
+            if not grep('ANSW_FBACK',data) : info['ANSW_FBACK']=[None]*2
+            if not grep('ANSW_TEXT',data)  : info['ANSW_TEXT']=[""]*2
+            if not grep('ANSW_GRAD',data)  : info['ANSW_GRAD']=["0"]*2
+            if not grep('ANSW_IMG',data)   : info['ANSW_IMG']=[""]*2
         case "multichoice" | "numerical" | "multichoicewiris" | "shortanswerwiris" | "matching" | "shortanswer" :
             if not grep('ANSW_FBACK',data) : info['ANSW_FBACK']=[None]*m
             if not grep('ANSW_TEXT',data)  : info['ANSW_TEXT']=[""]*m
@@ -62,6 +67,8 @@ def default_values_before(data):
 def check_values_after(info):
     ALLOWED_CR_CASE_DISPLAY=["SHOW", "HIDE", "HIDE_IF_SUCCEED","HIDE_IF_FAIL"]
     match info["TYPE"] :
+        case "truefalse" :
+            print(""
         case "coderunner" :
             for v in info["CR_CASE_DISPLAY"]:
                 assert v in ALLOWED_CR_CASE_DISPLAY, f"{v} is not in CR_CASE_DISPLAY\nCheck your input"

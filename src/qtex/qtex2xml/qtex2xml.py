@@ -157,7 +157,10 @@ def xml_globalinfo(info,outfile,indent):
 
     outfile.write(tab(indent)+octextcdataxml("generalfeedback",("format","html"),cdata=info["GFBACK"]))
     outfile.write(tab(indent)+ocxml("defaultgrade",valeur="1.0000000"))
-    outfile.write(tab(indent)+ocxml("penalty",valeur="0.3333333"))
+    if info["TYPE"] == "truefalse" :
+        outfile.write(tab(indent)+ocxml("penalty",valeur="1"))
+    else:
+        outfile.write(tab(indent)+ocxml("penalty",valeur="0.3333333"))
     outfile.write(tab(indent)+ocxml("hidden",valeur="0"))
     outfile.write(tab(indent)+ocxml("idnumber"))
 #--------------------------------------------------------------------------------------------------
@@ -369,8 +372,8 @@ def xml_question(info,outfile,indent=0):
         xml_globalinfo(info,outfile,indent+1)
     else :
         xml_category_globalinfo(info,outfile,indent+1)
-    #MULTICHOICE | NUMERICAL | SHORTANSWERWIRIS | MATCHING | SHORTANSWER
-    if info["TYPE"] in [ "multichoice", "numerical" , "multichoicewiris", "shortanswerwiris", "matching" , "shortanswer" ] :
+    #MULTICHOICE | TRUEFALSE | NUMERICAL | SHORTANSWERWIRIS | MATCHING | SHORTANSWER
+    if info["TYPE"] in [ "multichoice", "truefalse", "numerical" , "multichoicewiris", "shortanswerwiris", "matching" , "shortanswer" ] :
 
         if info["TYPE"] in ["multichoice","multichoicewiris","shortanswer"] : xml_multichoice_globalinfo(info,outfile,indent+1)
         if info["TYPE"] == "matching" : xml_matching_globalinfo(info,outfile,indent+1)

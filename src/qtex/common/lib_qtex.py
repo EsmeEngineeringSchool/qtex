@@ -68,7 +68,18 @@ def check_values_after(info):
     ALLOWED_CR_CASE_DISPLAY=["SHOW", "HIDE", "HIDE_IF_SUCCEED","HIDE_IF_FAIL"]
     match info["TYPE"] :
         case "truefalse" :
-            print(""
+            # l'idée est de regarder si ANSW_TEXT est donné :
+            # si oui :
+            #   - compléter  ANSW_TEXT par l'opposer 
+            #   - si ANSW_GRAD est donné il faut compléter par un 0
+            #   - si ANSW_GRAD n'est pas donnée il faut compléter par 100 et 0 
+            if len(info["ANSW_TEXT"]) == 1 :
+                if len(info["ANSW_GRAD"]) == 0 :
+                    info["ANSW_GRAD"].append("100")    
+                    info["ANSW_GRAD"].append("0")    
+                if len(info["ANSW_GRAD"]) == 1 :
+                    info["ANSW_GRAD"].append("0")    
+                info["ANSW_TEXT"].append("false" if info["ANSW_TEXT"][0] == "true" else "true") 
         case "coderunner" :
             for v in info["CR_CASE_DISPLAY"]:
                 assert v in ALLOWED_CR_CASE_DISPLAY, f"{v} is not in CR_CASE_DISPLAY\nCheck your input"

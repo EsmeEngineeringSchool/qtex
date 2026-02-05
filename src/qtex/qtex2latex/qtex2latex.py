@@ -270,6 +270,9 @@ def parsing():
         output.truncate()
     path=os.path.dirname(args.input[0].name)+'/'
     filespath=args.input
+    if args.shuffle is None :
+        args.shuffle=[k for k in range(4)]
+        random.shuffle(args.shuffle)
     return path,filespath,output,args.corrige,args.shuffle
 #--------------------------------------------------------------------------------------------------
 def html_to_tex(info):

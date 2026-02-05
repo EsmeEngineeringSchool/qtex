@@ -24,4 +24,4 @@ et charger un fichier depuis `tests/exemples/xml/`.
 Un script de filtre du type `html2tex` est manquant et pourrait aller dans `qtex/common/`
 
 [^1]: Ce dépôt est le résultat de la fusion de trois précédents dépôts maintenant disparus de https://github.com/EsmeEngineeringSchool/ 
-[^2]: Ce format ne prenait en compte que deux types de questions multichoice (CM) et matching (A). [(exemple de fichier tex_)](tests/exemples/tex_/gnu_2_en.tex_)
+[^2]: Ce format ne prenait en compte que deux types de questions multichoice (CM) et matching (A). [(exemple de fichier tex_)](https://github.com/EsmeEngineeringSchool/qtex/tests/exemples/tex_/gnu_2_en.tex_)

@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+import sys
+import argparse
+import tempfile
+import subprocess
+import webbrowser
+import shutil
+import http.server
+import socketserver
+from functools import partial
+from pathlib import Path
+
+def parse_args():
+    parser = argparse.ArgumentParser(prog="qtex2html",description="Visualisation HTML d'un fichier qtex via XML")
+    parser.add_argument("-i", "--input",required=True,metavar="FILE",help="fichier qtex à visualiser")
+    return parser.parse_args()
+
+def main():
+    args = parse_args()
+    source = Path(args.input).resolve()
+    xml_filename = source.with_suffix(".xml").name
+    # 1. Création du dossier temporaire
+    tmpdir = Path(tempfile.mkdtemp(prefix="qtex_web_"))
+    xml_dest = tmpdir / xml_filename
+
+    # 2. Génération du XML via qtex2xml [cite: 1]
+    try:
+        subprocess.run(
+            ["qtex2xml", "-i", str(source), "-o", str(xml_dest)],
+            check=True
+        )
+    except subprocess.CalledProcessError:
+        print("Erreur lors de la génération du XML")
+        return
+
+    # 3. Copie des fichiers du viewer vers le dossier temporaire [cite: 1]
+    script_dir = Path(__file__).parent.parent
+    viewer_src = script_dir / "tools/viewer"
+    assets = ["index.html", "viewer.js", "viewer.css"]
+
+    for item in assets:
+        src_path = viewer_src / item
+        if src_path.exists():
+            shutil.copy(src_path, tmpdir / item)
+
+    Handler = partial( http.server.SimpleHTTPRequestHandler,directory=tmpdir)
+    # On utilise un "with" pour s'assurer que le port est libéré à la fin
+    socketserver.TCPServer.allow_reuse_address = True  # Autorise la réutilisation immédiate
+    with socketserver.TCPServer(("", 0), Handler) as httpd:
+        port = httpd.server_address[1]
+        url = f"http://localhost:{port}/index.html?src={source.name}"
+        print(f"\nServeur lancé sur {url}")
+        print("Appuyez sur Ctrl+C pour arrêter le serveur.")
+        # Ouvre le navigateur après un court délai ou directement
+        webbrowser.open(url)
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\nArrêt du serveur.")
+            httpd.server_close()
+        finally:
+            shutil.rmtree(tmpdir)
+
+if __name__ == "__main__":
+    main()

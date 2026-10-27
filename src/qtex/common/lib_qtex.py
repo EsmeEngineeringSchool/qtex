@@ -1,4 +1,5 @@
 import sys
+from pathlib import Path
 from .format_qtex import types_with_requirements,same_number,infos
 from .string_ import get, grep, mult
 #--------------------------------------------------------------------------------------------------
@@ -96,6 +97,7 @@ def readqtex(path,file):
     # ------------------------------------------
     info=default_values_before(data) 
     info["PATH"]=path
+    info["ID"]=Path(file.name).stem
     # lectures des entrées globales
     for c in infos["global"] :
         cle=quellecle(c,data)

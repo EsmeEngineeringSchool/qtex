@@ -4,7 +4,7 @@ import os
 import argparse
 import re
 import random
-from qtex.common.lib_qtex import quellecle,readqtex,default_values_before 
+from qtex.common.lib_qtex import quellecle, readqtex, default_values_before 
 # -----------------------------------------------------------------
 # join lines d'une liste
 # -----------------------------------------------------------------
@@ -92,7 +92,12 @@ def ans_to_frame(answ_text,answ_grad,answ_img,path,index,corrige=True):
     else:
         return f"\\item {{{content}}}"
 # --------------------------------------------------------------------------
-def write_question(info,outfile):
+def ans_to_amc(answ_text,answ_img,path):
+    if not len(answ_img) :
+        return f"{answ_text}"
+    print("TODO : gérer les images avec AMC")
+# --------------------------------------------------------------------------
+def write_question_latex(info,outfile):
     if len(info["EXTRA_Q_LONG"]) :
         outfile.write(macro("question",info["Q"])+newline(""))
         outfile.write(info["EXTRA_Q_LONG"]+newline(""))
@@ -102,8 +107,8 @@ def write_question(info,outfile):
 def description_to_latex(info,outfile):
     outfile.write(info["Q"]+newline(""))
 # --------------------------------------------------------------------------
-def multichoice_to_latex(info,outfile,corrige=True,shuffle=[0,1,2,4]):
-    write_question(info,outfile)
+def multichoice_to_latex(info,outfile,corrige=True,shuffle=[0,1,2,3]):
+    write_question_latex(info,outfile)
     answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD'],info['ANSW_IMG']))
     #random.shuffle(answ)
     answ=[answ[i] for i in shuffle]
@@ -146,6 +151,45 @@ def multichoice_to_frame(info,outfile,**kwargs):
         out+=[end("blockQues")]
     out+=[end("frame")]
     outfile.write(newlines(out))
+#% --- BANQUE DE QUESTIONS ---
+#\element{algebre}{
+#  \begin{question}{q-matrice}
+#    Soit $A$ une matrice carrée. Que vaut $\det(I)$ ?
+#    \begin{choices}
+#      \correctchoice{1}
+#      \wrongchoice{0}
+#      \wrongchoice{$-1$}
+#    \end{choices}
+#  \end{question}
+#}
+def multichoice_to_amc(info,outfile,**kwargs):
+    shuffle=kwargs.get("shuffle",[0,1,2,3])
+    out=[]
+    answ=list(zip(info['ANSW_TEXT'],info['ANSW_GRAD'],info['ANSW_IMG']))
+    ismult= sum(float(x) > 0 for x in info['ANSW_GRAD'] ) > 1
+    if ismult :
+        out+=[begin("questionmult",arguments=info["ID"].replace("_",""))]
+    else:
+        out+=[begin("question",arguments=info["ID"].replace("_",""))]
+    if len(info["EXTRA_Q_LONG"]) :
+        out+=[info["EXTRA_Q_LONG"]]
+    else:
+        out+=[info["Q"]]
+    out+=[begin("choices")]
+    #random.shuffle(answ)
+    answ=[answ[i] for i in shuffle]
+    for k, (answ_txt,answ_grad,answ_img) in enumerate(answ):
+        if float(answ_grad) > 0.0 :
+            out+=[macro("correctchoice",ans_to_amc(answ_txt,answ_img,info['PATH']))]
+        else:
+            out+=[macro("wrongchoice",ans_to_amc(answ_txt,answ_img,info['PATH']))]
+    out+=[end("choices")]
+    if ismult :
+        out+=[end("questionmult")]
+    else:
+        out+=[end("question")]
+    out+=[""]
+    outfile.write(newlines(out))
     
 # --------------------------------------------------------------------------
 def tikz_matching(k, subq, answ_text, gw=80, dw=80):
@@ -177,8 +221,11 @@ def tikz_relie(indices):
     # relie toutes les sous questions à leurs réponses
     return "\n".join([ f"{macro('draw')}[very thick] (b{k+1}) -- (c{i+1});" for k,i in enumerate(indices)])
 # --------------------------------------------------------------------------
+def matching_to_amc():
+    assert False,f"matching_to_amc : TO BE IMPLEMENTED"
+# --------------------------------------------------------------------------
 def matching_to_latex(info,outfile,corrige=True,shuffle=[0,1,2,3]):
-    write_question(info,outfile)
+    write_question_latex(info,outfile)
     outfile.write(macro('indent')+macro('resizebox','\linewidth')+'{!}{%'+newline())
     outfile.write(begin("tikzpicture"))
     maxwidth_sub_q, maxwidth_answ_text = (max(map(len,info['SUB_Q']))+8)*1.51323 , (max(map(len,info['ANSW_TEXT']))+8)*1.51323
@@ -194,7 +241,7 @@ def matching_to_latex(info,outfile,corrige=True,shuffle=[0,1,2,3]):
     outfile.write('}')
 # --------------------------------------------------------------------------
 def coderunner_to_latex(info,outfile,numlines=18,corrige=True):
-    write_question(info,outfile)
+    write_question_latex(info,outfile)
     outfile.write(begin("tikzpicture"))
     outfile.write(macro('draw')+"[gray!40] (0,0) grid[step=0.5cm](16.5cm,"+f"{numlines*0.5}cm)"+";\n")
     outfile.write(macro('draw')+"[ultra thick,inner sep=0] (0,0) rectangle (16.5cm,"+f"{numlines*0.5}cm)"+";\n")
@@ -242,6 +289,15 @@ def qtex_to_frame(info,outfile,corrige,shuffle):
             matching_to_frame(info,outfile,corrige=corrige)
         case _:
             print("\n"f"le type {info['TYPE']} n'est pas disponible au format frame (Beamer/LaTeX)""\n",file=sys.stderr)
+# --------------------------------------------------------------------------
+def qtex_to_amc(info,outfile,corrige,shuffle):
+    match info["TYPE"]:
+        case "multichoice":
+            multichoice_to_amc(info,outfile,corrige=corrige,shuffle=shuffle)
+        case "matching":
+            matching_to_amc()
+        case _:
+            print("\n"f"le type {info['TYPE']} n'est pas disponible au format frame (Beamer/LaTeX)""\n",file=sys.stderr)
 #--------------------------------------------------------------------------------------------------
 def check_shuffle(value):
     # convertir en int et vérifier la valeur
@@ -279,6 +335,9 @@ def html_to_tex(info):
     filters=[]
     filters+=[lambda t : re.sub(r"{", r"\{", t)]
     filters+=[lambda t : re.sub(r"}", r"\}", t)]
+    filters+=[lambda t : re.sub(r"#", r"\#", t)]
+    filters+=[lambda t : re.sub(r"_", r"\_", t)]
+    filters+=[lambda t : re.sub(r"\^", r"\\textasciicircum{}", t)]
     filters+=[lambda t : re.sub(r"<tt>(.*?)</tt>", r"\\texttt{\1}", t)]
     filters+=[lambda t : re.sub(r"<strong>(.*?)</strong>", r"\\textbf{\1}", t)]
     filters+=[lambda t : re.sub(r"<p>(.*?)</p>", r"\1", t, flags=re.DOTALL)]
@@ -286,11 +345,14 @@ def html_to_tex(info):
     filters+=[lambda t : re.sub(r"<ul>(.*?)</ul>", r"\\begin{itemize}\1\\end{itemize}", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"<li>(.*?)</li>", r"\\item \1", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"\$", r"\\$", t)]
-    filters+=[lambda t : re.sub(r"&dollar;", r"\\\$", t)]
+    filters+=[lambda t : re.sub(r"&dollar;", r"\\$", t)]
+    filters+=[lambda t : re.sub(r"&amp;", r"\\&", t)]
+    filters+=[lambda t : re.sub(r"&gt;", r">", t)]
+    filters+=[lambda t : re.sub(r"&lt;", r"<", t)]
     filters+=[lambda t : re.sub(r"<img[^>]*\bsrc=\"([^\"]+)\"[^>]*>",r"\\begin{center}\n\\includegraphics[width=0.5\\linewidth]{\1}\\end{center}\n",t,flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"@@PLUGINFILE@@",rf"{info['PATH']}assets",t,flags=re.DOTALL)]
     for key in info :
-        if key in ["CR_PRELOAD","CR_ANSWER"] : continue 
+        if key in ["CR_PRELOAD","CR_ANSWER","ID","NAME"] : continue 
         for f in filters:
             if info[key] is not None :
                 if isinstance(info[key],list):
@@ -322,4 +384,14 @@ def main_qtex_to_frame():
         html_to_tex(info)
         qtex_to_frame(info,outfile,corrige,shuffle)
         printinfodebug(file,info)
+#--------------------------------------------------------------------------------------------------
+def main_qtex_to_amc():
+    path,filespath,outfile,corrige,shuffle=parsing()
+    for file in filespath :
+        if file.name.endswith("category.qtex"): continue
+        info=readqtex(path,file)
+        html_to_tex(info)
+        qtex_to_amc(info,outfile,corrige,shuffle)
+        printinfodebug(file,info)
+
 

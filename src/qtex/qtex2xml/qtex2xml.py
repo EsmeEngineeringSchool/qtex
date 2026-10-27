@@ -387,7 +387,6 @@ def xml_question(info,outfile,indent=0):
                 info["ANSW_IMG"]]
         if info["TYPE"] == "matching" : 
             answ_.append(info["SUB_Q"])
-
         for ans in list(zip(*answ_)) :
             if info["TYPE"] == "matching" : 
                 xml_subquestion(info,ans,outfile,indent=indent)
@@ -453,8 +452,8 @@ def main() :
         info=readqtex(path,file)
         for printinfo in ['TYPE','NAME','TAGS']:
             if printinfo in info :
-                print(f"\n\ttype : {info[printinfo]}",file=sys.stderr,end="")
+                print(f"\n\t{printinfo.lower()} : {info[printinfo]}",file=sys.stderr,end="")
+        print(file=sys.stderr)
         xml_question(info,outfile,1)
-
     xml_footerquiz(outfile=outfile)
 

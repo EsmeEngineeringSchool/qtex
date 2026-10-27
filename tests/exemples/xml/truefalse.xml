@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+	<!-- question: gentestmoodle.py  -->
+	<question type="category">
+		<category><text>Tous les exemples de qtex2xml</text></category>
+		<info format="html"><text></text></info>
+		<idnumber></idnumber>
+	</question>
+	<!-- question: gentestmoodle.py  -->
+	<question type="truefalse">
+		<name><text>Exemple de question truefalse</text></name>
+		<questiontext format="html">
+			<text><![CDATA[Est-ce que <tt>bash</tt> est un intérpréteur de commandes ?]]></text>
+		</questiontext>
+		<generalfeedback format="html"><text><![CDATA[Merci d'avoir pris le temps de répondre à cette question.]]></text></generalfeedback>
+		<defaultgrade>1.0000000</defaultgrade>
+		<penalty>1</penalty>
+		<hidden>0</hidden>
+		<idnumber></idnumber>
+		<answer fraction="100" format="html">
+			<text><![CDATA[true]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<answer fraction="0" format="html">
+			<text><![CDATA[false]]></text>
+			<feedback format="html">
+				<text></text>
+			</feedback>
+			<tolerance>0.0</tolerance>
+		</answer>
+		<tags>
+			<tag><text>qtex2xml</text></tag>
+			<tag><text>exemple</text></tag>
+			<tag><text>truefalse</text></tag>
+			<tag><text>template</text></tag>
+		</tags>
+	</question>
+</quiz>

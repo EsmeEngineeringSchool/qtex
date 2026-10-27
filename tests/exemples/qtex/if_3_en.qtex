@@ -1,0 +1,16 @@
+#TYPE multichoice
+#NAME if_3_en
+#Q Which of these syntaxes is correct?
+#GFBACK Thank you for taking the time to answer this question.
+#CFBACK Well done! Your answer is correct.
+#PFBACK Your answer is partially correct.
+#IFBACK Your answer is incorrect.
+#ANSW_GRAD 100.0
+#ANSW_GRAD 0.0
+#ANSW_GRAD 0.0
+#ANSW_GRAD 0.0
+#ANSW_TEXT <tt>if [ &dollar;x -gt &dollar;y ]</tt>
+#ANSW_TEXT <tt>if &dollar;x -gt &dollar;y</tt>
+#ANSW_TEXT <tt>if ( &dollar;x -gt &dollar;y )</tt>
+#ANSW_TEXT None of them
+#TAGS if script variable syntaxe cours08 AAS56 AAS57 AAS59

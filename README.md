@@ -9,6 +9,7 @@ Monodépôt[^1] contenant les trois sous-modules QTeX :
 D'autres scripts utiles:
 
 - `qtex2pdf` : utilise `qtex2latex` pour générer un aperçu de la question au format pdf.
+- `qtex2amc` : utilise `qtex2latex` pour générer une version AMC (auto-multiple-choice) de la question
 - `merge_xml` : qui permet de **fusionner plusieurs fichiers XML Moodle** (traduit ou non) en un seul 
                 fichier global prêt à être importé dans Moodle.
 - `qtex2exam` : utilise `qtex2latex` pour générer un examen LaTeX en utilisant le template examen 

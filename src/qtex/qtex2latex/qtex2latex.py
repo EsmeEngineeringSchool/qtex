@@ -188,7 +188,6 @@ def multichoice_to_amc(info,outfile,**kwargs):
         out+=[end("questionmult")]
     else:
         out+=[end("question")]
-    out+=[""]
     outfile.write(newlines(out))
     
 # --------------------------------------------------------------------------

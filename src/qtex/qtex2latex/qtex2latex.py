@@ -313,7 +313,7 @@ def check_shuffle(value):
 def parsing():
     parser = argparse.ArgumentParser()
     parser.add_argument('-i','--input', nargs='+', type=argparse.FileType('r'),
-                        default=sys.stdin,help='input files (on single or a set)',required=True)
+                        help='input files (on single or a set)',required=True)
     parser.add_argument('-o','--output', nargs='?', type=argparse.FileType('a'),
                         default=sys.stdout, help='output file or stdout')
     parser.add_argument('-c','--corrige',   action='store_true', default=False, 
@@ -331,20 +331,27 @@ def parsing():
         random.shuffle(args.shuffle)
     return path,filespath,output,args.corrige,args.shuffle
 #--------------------------------------------------------------------------------------------------
+LATEX_ESC = {
+    "\\": r"\textbackslash{}",
+    "{":  r"\{",
+    "}":  r"\}",
+    "#":  r"\#",
+    "_":  r"\_",
+    "$":  r"\$",
+    "%":  r"\%",
+    "^":  r"\textasciicircum{}",
+    "~":  r"\textasciitilde{}",
+}
+LATEX_ESC_RE = re.compile("[" + re.escape("".join(LATEX_ESC)) + "]")
 def html_to_tex(info):
     filters=[]
-    filters+=[lambda t : re.sub(r"{", r"\{", t)]
-    filters+=[lambda t : re.sub(r"}", r"\}", t)]
-    filters+=[lambda t : re.sub(r"#", r"\#", t)]
-    filters+=[lambda t : re.sub(r"_", r"\_", t)]
-    filters+=[lambda t : re.sub(r"\^", r"\\textasciicircum{}", t)]
+    filters+=[lambda t : LATEX_ESC_RE.sub(lambda m: LATEX_ESC[m.group()], t)]
     filters+=[lambda t : re.sub(r"<tt>(.*?)</tt>", r"\\texttt{\1}", t)]
     filters+=[lambda t : re.sub(r"<strong>(.*?)</strong>", r"\\textbf{\1}", t)]
     filters+=[lambda t : re.sub(r"<p>(.*?)</p>", r"\1", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"<pre>(.*?)</pre>", r"\\begin{verbatim}\n\1\\end{verbatim}", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"<ul>(.*?)</ul>", r"\\begin{itemize}\1\\end{itemize}", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"<li>(.*?)</li>", r"\\item \1", t, flags=re.DOTALL)]
-    filters+=[lambda t : re.sub(r"\$", r"\\$", t)]
     filters+=[lambda t : re.sub(r"&dollar;", r"\\$", t)]
     filters+=[lambda t : re.sub(r"&amp;", r"\\&", t)]
     filters+=[lambda t : re.sub(r"&gt;", r">", t)]
@@ -352,7 +359,7 @@ def html_to_tex(info):
     filters+=[lambda t : re.sub(r"<img[^>]*\bsrc=\"([^\"]+)\"[^>]*>",r"\\begin{center}\n\\includegraphics[width=0.5\\linewidth]{\1}\\end{center}\n",t,flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"@@PLUGINFILE@@",rf"{info['PATH']}assets",t,flags=re.DOTALL)]
     for key in info :
-        if key in ["CR_PRELOAD","CR_ANSWER","ID","NAME"] : continue 
+        if key in ["CR_PRELOAD","CR_ANSWER","ID","NAME"] : continue
         for f in filters:
             if info[key] is not None :
                 if isinstance(info[key],list):

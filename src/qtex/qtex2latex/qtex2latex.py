@@ -346,7 +346,7 @@ LATEX_ESC_RE = re.compile("[" + re.escape("".join(LATEX_ESC)) + "]")
 def html_to_tex(info):
     filters=[]
     filters+=[lambda t : LATEX_ESC_RE.sub(lambda m: LATEX_ESC[m.group()], t)]
-    filters+=[lambda t : re.sub(r"<tt>(.*?)</tt>", r"\\texttt{\1}", t)]
+    filters+= [lambda t: re.sub(r"<tt>(.*?)</tt>",lambda m: r"\texttt{" + m.group(1).replace("'", r"\textquotesingle{}") + "}",t,flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"<strong>(.*?)</strong>", r"\\textbf{\1}", t)]
     filters+=[lambda t : re.sub(r"<p>(.*?)</p>", r"\1", t, flags=re.DOTALL)]
     filters+=[lambda t : re.sub(r"<pre>(.*?)</pre>", r"\\begin{verbatim}\n\1\\end{verbatim}", t, flags=re.DOTALL)]

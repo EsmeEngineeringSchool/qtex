@@ -289,6 +289,7 @@ def qtex_to_frame(info,outfile,corrige,shuffle):
             matching_to_frame(info,outfile,corrige=corrige)
         case _:
             print("\n"f"le type {info['TYPE']} n'est pas disponible au format frame (Beamer/LaTeX)""\n",file=sys.stderr)
+    outfile.write("\n")
 # --------------------------------------------------------------------------
 def qtex_to_amc(info,outfile,corrige,shuffle):
     match info["TYPE"]:
@@ -298,6 +299,7 @@ def qtex_to_amc(info,outfile,corrige,shuffle):
             matching_to_amc()
         case _:
             print("\n"f"le type {info['TYPE']} n'est pas disponible au format frame (Beamer/LaTeX)""\n",file=sys.stderr)
+    outfile.write("\n")
 #--------------------------------------------------------------------------------------------------
 def check_shuffle(value):
     # convertir en int et vérifier la valeur

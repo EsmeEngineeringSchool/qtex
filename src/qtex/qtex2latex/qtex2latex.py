@@ -374,12 +374,20 @@ def printinfodebug(file,info):
     print(f"{file.name}",file=sys.stderr)
     print(f"\ttype : {info['TYPE']}\n\tname : {info['NAME']}\n\ttags : {info['TAGS']} ",file=sys.stderr)
     print(f"{64*'-'}",file=sys.stderr)
+
+#--------------------------------------------------------------------------------------------------
+def read_or_exit(path, file):
+    try:
+        return readqtex(path, file)
+    except ParseError as err:
+        print(err, file=sys.stderr)      # str(err) = "fichier:ligne [code] : message"
+        sys.exit(1)
 #--------------------------------------------------------------------------------------------------
 def main_qtex_to_latex():
     path,filespath,outfile,corrige,shuffle=parsing()
     for file in filespath :
         if file.name.endswith("category.qtex"): continue
-        info=readqtex(path,file)
+        info=read_or_exit(path, file)          # ← remplace readqtex(path,file)
         html_to_tex(info)
         qtex_to_latex(info,outfile,corrige,shuffle)
         printinfodebug(file,info)
@@ -388,7 +396,7 @@ def main_qtex_to_frame():
     path,filespath,outfile,corrige,shuffle=parsing()
     for file in filespath :
         if file.name.endswith("category.qtex"): continue
-        info=readqtex(path,file)
+        info=read_or_exit(path, file)          # ← remplace readqtex(path,file)
         html_to_tex(info)
         qtex_to_frame(info,outfile,corrige,shuffle)
         printinfodebug(file,info)
@@ -397,7 +405,7 @@ def main_qtex_to_amc():
     path,filespath,outfile,corrige,shuffle=parsing()
     for file in filespath :
         if file.name.endswith("category.qtex"): continue
-        info=readqtex(path,file)
+        info=read_or_exit(path, file)          # ← remplace readqtex(path,file)
         html_to_tex(info)
         qtex_to_amc(info,outfile,corrige,shuffle)
         printinfodebug(file,info)

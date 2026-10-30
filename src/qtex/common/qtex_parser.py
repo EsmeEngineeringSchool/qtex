@@ -11,7 +11,6 @@ Règles :
 """
 import re
 from dataclasses import dataclass
-
 from .format_qtex import entrees
 
 _END = re.compile(r"#END(?:[ \t]+(\S+))?[ \t]*")
@@ -30,20 +29,25 @@ class Entry:
 
 
 class ParseError(ValueError):
-    def __init__(self, line: int, code: str, message: str):
+    def __init__(self, line: int, code: str, message: str,filename: str | None = None):
         super().__init__(f"ligne {line}: {message}")
         self.line = line
         self.code = code      # unclosed_block, orphan_end, mismatched_end, stray_line
         self.message = message
+        self.filename = filename
     def __str__(self):
-        return f"{self.code}  {self.message}"
+        where = f"{self.filename}:{self.line}" if self.filename else f"ligne {self.line}"
+        return f"{where} [{self.code}]  {self.message}"
 
 
-def _block_value(lines: list[str]) -> str:
-    # même découpage que l'ancien rmnewlineboth(...).rstrip()
-    if lines and lines[0] == "":
-        lines = lines[1:]
-    return "\n".join(lines).rstrip()
+def _block_value(buf):
+    """Retire au plus une ligne vide en tête et en queue, puis rstrip :
+    reproduit rmnewlineboth(...).rstrip() de l'ancien get()."""
+    if buf and buf[0] == "":
+        buf = buf[1:]
+    if buf and buf[-1] == "":
+        buf = buf[:-1]
+    return "\n".join(buf).rstrip()
 
 # prend une chaine et retourne les entrées et erreurs qtex
 def tokenize(text: str, *, strict: bool = True) -> tuple[list[Entry], list[ParseError]]:

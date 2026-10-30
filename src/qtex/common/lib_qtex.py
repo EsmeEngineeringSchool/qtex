@@ -144,7 +144,7 @@ def readqtex(path, file):
         info = default_values_before(entries, filename)
     except ParseError as err:
         if err.filename is None:
-            raise ParseError(err.line, err.message, filename) from None
+            raise ParseError(err.line, err.code, err.message, filename) from None 
         raise
     info["PATH"] = path
     info["ID"] = Path(filename).stem

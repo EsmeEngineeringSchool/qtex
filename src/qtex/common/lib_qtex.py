@@ -10,13 +10,16 @@ def tab(k):
     return k * "\t"
 
 # --------------------------------------------------------------------
-# (clé d'info, variantes présentes dans le fichier) pour un élément de infos :
+# (clé d'info, formes présentes dans le fichier) pour un élément de infos :
 #   'Q'            -> ('Q', ['Q'])
 #   ('Q','Q_LONG') -> ('Q', ['Q', 'Q_LONG'])
+# NB : dans un tuple, cle[0] est la clé d'info ET une clé du fichier possible
+# (l'ancienne quellecle testait grep(cle[0]) comme les autres).
 def _variants(spec):
     if isinstance(spec, tuple):
-        return spec[0], list(spec[1:])
+        return spec[0], list(spec)
     return spec, [spec]
+
 
 # --------------------------------------------------------------------
 # Valeurs par défaut ; entries = sortie de tokenize(), pas le texte brut.
@@ -106,6 +109,30 @@ def _fill(info, entries, specs):
             info.setdefault(ik, []).append(e.value)
         else:
             info[ik] = e.value      # dernier gagnant, en ordre du fichier (Q, Q_LONG…)
+
+# ----------------------------------------------------------------------------------------------
+# Vérifier quelques valeurs données à certaines clés
+def check_values_after(info):
+    ALLOWED_CR_CASE_DISPLAY = ["SHOW", "HIDE", "HIDE_IF_SUCCEED", "HIDE_IF_FAIL"]
+    match info["TYPE"]:
+        case "truefalse":
+            # l'idée est de regarder si ANSW_TEXT est donné :
+            # si oui :
+            #   - compléter ANSW_TEXT par l'opposé
+            #   - si ANSW_GRAD est donné, il faut compléter par un 0
+            #   - si ANSW_GRAD n'est pas donnée, il faut compléter par un 100 et 0
+            if len(info["ANSW_TEXT"]) == 1:
+                if len(info["ANSW_GRAD"]) == 0:
+                    info["ANSW_GRAD"].append("100")
+                    info["ANSW_GRAD"].append("0")
+                if len(info["ANSW_GRAD"]) == 1:
+                    info["ANSW_GRAD"].append("0")
+                info["ANSW_TEXT"].append("false" if info["ANSW_TEXT"][0] == "true" else "true")
+        case "coderunner":
+            for v in info["CR_CASE_DISPLAY"]:
+                assert v in ALLOWED_CR_CASE_DISPLAY, f"{v} is not in CR_CASE_DISPLAY\nCheck your input"
+        case _:
+            return
 
 # --------------------------------------------------------------------
 # Lecture d'un fichier au format qtex : retourne le dictionnaire info.

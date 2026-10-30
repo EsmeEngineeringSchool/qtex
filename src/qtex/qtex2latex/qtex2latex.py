@@ -4,7 +4,7 @@ import os
 import argparse
 import re
 import random
-from qtex.common.lib_qtex import quellecle, readqtex, default_values_before 
+from qtex.common.lib_qtex import readqtex
 # -----------------------------------------------------------------
 # join lines d'une liste
 # -----------------------------------------------------------------

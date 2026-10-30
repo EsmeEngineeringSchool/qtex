@@ -17,7 +17,7 @@ z = root(f,2)['x'][0]
 #END CR_ANSWER
 #CR_CASE_CODE_LONG
 print("z" in dir())
-#END CR_CASE_CODE
+#END CR_CASE_CODE_LONG
 #CR_CASE_CODE_LONG
 print(1.41421 <= z <= 1.41422)
 #END CR_CASE_CODE_LONG

@@ -39,6 +39,7 @@ entrees={'TYPE'                    :{'long':False,'translation':False,'multiple'
          'CR_CASE_STDIN'           :{'long':False,'translation':False,'multiple':True },
          'CR_CASE_DISPLAY'         :{'long':False,'translation':False,'multiple':True },
          'CR_CASE_EXTRA'           :{'long':False,'translation':False,'multiple':True },
+         'CR_CASE_EXTRA_LONG'      :{'long':True ,'translation':False,'multiple':True },
          'CR_CASE_ASEXAMPLE'       :{'long':False,'translation':False,'multiple':True },
          'CR_CASE_EXPECTED'        :{'long':False,'translation':False,'multiple':True },
          'CR_CASE_EXPECTED_LONG'   :{'long':True ,'translation':False,'multiple':True },

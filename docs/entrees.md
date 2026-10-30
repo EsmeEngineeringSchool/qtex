@@ -1,4 +1,12 @@
-# A compléter !!
+# Entrées de qtex
+
+## Règles :
+
+* une clé est une ligne qui commence par # suivi de [A-Z][A-Z0-9_]* (colonne 0) ;
+* si la clé est « courte » (entrees[k]['long'] is False) : valeur = reste de la ligne après un espace (éventuellement vide) ;
+* si la clé est « longue » : bloc jusqu'à une ligne exactement égale à #END <KEY> ; à l'intérieur d'un bloc, aucune clé n'est interprétée ;
+* l'ordre d'apparition est conservé.
+
 ## Quelques acronymes :
 1. GFBACK: general Feedback
 2. CFBACK: Correct Feedback
